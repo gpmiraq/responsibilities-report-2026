@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>نظام تحليل المسؤوليات والإحلال الوظيفي 2026 | ترشيحات مقر الشركة</title>
   
   <!-- Google Fonts: Cairo & Tajawal -->
@@ -41,10 +41,10 @@
       --sidebar-w: 280px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', 'Tajawal', sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', 'Tajawal', sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background-color: var(--bg); color: var(--text); display: flex; min-height: 100vh; overflow-x: hidden; }
 
-    /* Sidebar */
+    /* Sidebar Drawer */
     .sidebar {
       width: var(--sidebar-w);
       background: linear-gradient(180deg, #07172c 0%, #0b2545 100%);
@@ -53,30 +53,57 @@
       flex-direction: column;
       position: fixed;
       top: 0; bottom: 0; right: 0;
-      z-index: 100;
-      box-shadow: -4px 0 20px rgba(0,0,0,0.15);
-      transition: transform 0.3s ease;
+      z-index: 1000;
+      box-shadow: -4px 0 20px rgba(0,0,0,0.25);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 999;
+    }
+    .sidebar-overlay.active { display: block; }
+
     .sidebar-header {
-      padding: 24px 20px;
+      padding: 20px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
       display: flex;
       align-items: center;
-      gap: 14px;
+      justify-content: space-between;
+    }
+
+    .sidebar-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
     .sidebar-header .logo-icon {
-      width: 44px; height: 44px;
+      width: 42px; height: 42px;
       background: linear-gradient(135deg, #0284c7, #38bdf8);
       border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 20px; color: white;
+      font-size: 19px; color: white;
       box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
     }
 
-    .sidebar-header h2 { font-size: 16px; font-weight: 800; line-height: 1.3; }
+    .sidebar-header h2 { font-size: 15px; font-weight: 800; line-height: 1.3; }
     .sidebar-header span { font-size: 11px; color: #94a3b8; display: block; }
+
+    .sidebar-close-btn {
+      display: none;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: white;
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
 
     .nav-list {
       list-style: none;
@@ -107,27 +134,120 @@
       font-size: 11.5px; color: #94a3b8; text-align: center;
     }
 
-    /* Main Content */
-    .main-wrapper { margin-right: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-width: 0; }
+    /* Main Content Wrapper */
+    .main-wrapper { margin-right: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-width: 0; padding-bottom: 70px; }
+
+    /* Top Bar */
     .topbar {
       background: var(--card-bg); border-bottom: 1px solid var(--border);
-      padding: 16px 28px; display: flex; align-items: center; justify-content: space-between;
-      position: sticky; top: 0; z-index: 50;
+      padding: 14px 20px; display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
     }
-    .topbar-title h1 { font-size: 19px; font-weight: 800; color: var(--primary); }
-    .topbar-title p { font-size: 12.5px; color: var(--text-muted); }
-    .topbar-actions { display: flex; align-items: center; gap: 10px; }
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .topbar-title h1 { font-size: 17px; font-weight: 800; color: var(--primary); }
+    .topbar-title p { font-size: 11.5px; color: var(--text-muted); }
+    .topbar-actions { display: flex; align-items: center; gap: 8px; }
+
+    .hamburger-btn {
+      display: none;
+      width: 40px; height: 40px;
+      background: #f1f5f9; border: 1px solid var(--border);
+      border-radius: 10px; color: var(--primary);
+      font-size: 18px; cursor: pointer;
+      align-items: center; justify-content: center;
+    }
+    .hamburger-btn:active { background: #e2e8f0; }
+
+    /* Mobile Quick Tab Bar (Horizontal Scroll on Mobile) */
+    .mobile-quick-tabs {
+      display: none;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 12px;
+      overflow-x: auto;
+      white-space: nowrap;
+      gap: 8px;
+      scrollbar-width: none;
+      position: sticky;
+      top: 68px;
+      z-index: 90;
+    }
+    .mobile-quick-tabs::-webkit-scrollbar { display: none; }
+
+    .quick-tab-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      color: var(--text-muted);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .quick-tab-chip.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.3);
+    }
+
+    /* Fixed Bottom Navigation for Mobile */
+    .mobile-bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 64px;
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      z-index: 900;
+      justify-content: space-around;
+      align-items: center;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
+    }
+
+    .bottom-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      color: #64748b;
+      font-size: 10px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      flex: 1;
+      height: 100%;
+      position: relative;
+    }
+
+    .bottom-nav-item i { font-size: 18px; }
+    .bottom-nav-item.active { color: var(--accent); }
+    .bottom-nav-item.active i { transform: scale(1.1); transition: transform 0.2s; }
+    .bottom-badge {
+      position: absolute;
+      top: 6px; right: 28%;
+      background: var(--danger);
+      color: white;
+      font-size: 9px;
+      padding: 1px 5px;
+      border-radius: 10px;
+      font-weight: 800;
+    }
 
     .btn {
       display: inline-flex; align-items: center; gap: 8px;
-      padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 700;
+      padding: 8px 14px; border-radius: 8px; font-size: 12.5px; font-weight: 700;
       cursor: pointer; border: none; transition: all 0.2s ease; text-decoration: none;
     }
     .btn-primary { background: var(--primary); color: white; }
     .btn-outline { background: white; border: 1px solid var(--border); color: var(--text); }
-    .btn-outline:hover { background: var(--bg); }
 
-    .content-area { padding: 28px; flex: 1; }
+    .content-area { padding: 20px; flex: 1; }
     .tab-section { display: none; }
     .tab-section.active { display: block; animation: fadeIn 0.25s ease; }
 
@@ -139,186 +259,199 @@
       border: 1px solid #a7f3d0;
       border-right: 5px solid #10b981;
       border-radius: 12px;
-      padding: 14px 18px;
-      margin-bottom: 20px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 8px;
     }
-    .hq-exclusive-alert .alert-text { font-size: 13px; color: #065f46; font-weight: 700; }
-    .hq-badge { background: #047857; color: white; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; }
+    .hq-exclusive-alert .alert-text { font-size: 12.5px; color: #065f46; font-weight: 700; }
+    .hq-badge { background: #047857; color: white; padding: 2px 8px; border-radius: 20px; font-size: 10.5px; font-weight: 800; }
 
     /* Cards */
     .card {
       background: var(--card-bg); border: 1px solid var(--border);
-      border-radius: 16px; padding: 24px; margin-bottom: 24px;
+      border-radius: 14px; padding: 18px; margin-bottom: 18px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.02);
     }
     .card-header {
       display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
-      gap: 12px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border);
+      gap: 8px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
     }
-    .card-header h3 { font-size: 17px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+    .card-header h3 { font-size: 15.5px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; }
     .card-header h3 i { color: var(--accent); }
 
     /* Candidate Hero */
     .candidate-hero {
       background: linear-gradient(135deg, #07172c 0%, #0b2545 40%, #134074 100%);
-      border-radius: 20px; padding: 30px; color: white; margin-bottom: 20px;
-      position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(7, 23, 44, 0.3);
+      border-radius: 16px; padding: 20px; color: white; margin-bottom: 16px;
+      position: relative; overflow: hidden; box-shadow: 0 8px 24px rgba(7, 23, 44, 0.25);
     }
-    .candidate-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; }
-    .candidate-main-info { display: flex; align-items: center; gap: 20px; }
+    .candidate-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; }
+    .candidate-main-info { display: flex; align-items: center; gap: 14px; }
     .candidate-avatar {
-      width: 80px; height: 80px;
+      width: 64px; height: 64px;
       background: linear-gradient(135deg, #38bdf8, #0284c7);
-      border: 4px solid rgba(255,255,255,0.2); border-radius: 20px;
+      border: 3px solid rgba(255,255,255,0.2); border-radius: 16px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 36px; color: white;
+      font-size: 28px; color: white; flex-shrink: 0;
     }
-    .candidate-titles h2 { font-size: 23px; font-weight: 900; }
-    .candidate-titles .badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .candidate-titles h2 { font-size: 19px; font-weight: 900; line-height: 1.2; }
+    .candidate-titles .badge-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
     .candidate-badge {
       background: rgba(255,255,255,0.15); backdrop-filter: blur(8px);
-      padding: 4px 12px; border-radius: 30px; font-size: 12px; font-weight: 700;
+      padding: 3px 10px; border-radius: 30px; font-size: 11px; font-weight: 700;
       border: 1px solid rgba(255,255,255,0.2);
     }
     .candidate-badge.gold { background: #f59e0b; color: #0f172a; border-color: #fbbf24; }
     .candidate-badge.cyan { background: #0284c7; color: white; border-color: #38bdf8; }
 
     .candidate-details-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 12px; margin-top: 20px; padding-top: 18px;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px; margin-top: 16px; padding-top: 14px;
       border-top: 1px solid rgba(255,255,255,0.15);
     }
     .cand-item {
-      background: rgba(255,255,255,0.08); padding: 10px 14px;
-      border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.08); padding: 8px 10px;
+      border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);
     }
-    .cand-item label { font-size: 11px; color: #94a3b8; display: block; margin-bottom: 2px; }
-    .cand-item span { font-size: 13px; font-weight: 700; color: #fff; }
+    .cand-item label { font-size: 10px; color: #94a3b8; display: block; margin-bottom: 1px; }
+    .cand-item span { font-size: 12px; font-weight: 700; color: #fff; }
 
     /* Sub-tabs */
     .sub-tabs-wrap {
-      display: flex; gap: 8px; background: #f1f5f9;
-      padding: 6px; border-radius: 12px; margin-bottom: 20px; overflow-x: auto;
+      display: flex; gap: 6px; background: #f1f5f9;
+      padding: 5px; border-radius: 10px; margin-bottom: 16px; overflow-x: auto;
     }
     .sub-tab-btn {
-      padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 700;
+      padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 700;
       border: none; background: transparent; color: var(--text-muted);
       cursor: pointer; transition: all 0.2s; white-space: nowrap;
-      display: flex; align-items: center; gap: 8px;
+      display: flex; align-items: center; gap: 6px;
     }
     .sub-tab-btn.active {
       background: white; color: var(--primary);
       box-shadow: 0 2px 6px rgba(0,0,0,0.06);
     }
     .sub-tab-btn .badge-pill {
-      background: #e2e8f0; color: #475569; padding: 2px 7px;
-      border-radius: 10px; font-size: 11px;
+      background: #e2e8f0; color: #475569; padding: 2px 6px;
+      border-radius: 10px; font-size: 10.5px;
     }
     .sub-tab-btn.active .badge-pill { background: var(--accent-light); color: var(--accent); }
 
     /* Recommendation Cards */
-    .rec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 16px; }
+    .rec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
     .rec-card {
-      border: 1px solid var(--border); border-radius: 14px; padding: 18px;
+      border: 1px solid var(--border); border-radius: 12px; padding: 14px;
       background: #ffffff; display: flex; flex-direction: column; justify-content: space-between;
-      transition: all 0.25s ease; position: relative;
+      transition: all 0.2s ease; position: relative;
     }
-    .rec-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(2, 132, 199, 0.08); }
-    .rec-card.high-match { border-right: 5px solid #10b981; }
-    .rec-card.retire-alert { border-right: 5px solid #ea580c; background: #fffdfa; }
+    .rec-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 6px 14px rgba(2, 132, 199, 0.08); }
+    .rec-card.high-match { border-right: 4px solid #10b981; }
+    .rec-card.retire-alert { border-right: 4px solid #ea580c; background: #fffdfa; }
 
-    .rec-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; gap: 8px; }
-    .rec-title { font-size: 14.5px; font-weight: 800; color: var(--primary); line-height: 1.35; }
-    .score-badge { font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
+    .rec-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 6px; }
+    .rec-title { font-size: 13.5px; font-weight: 800; color: var(--primary); line-height: 1.3; }
+    .score-badge { font-size: 10.5px; font-weight: 800; padding: 2px 6px; border-radius: 6px; white-space: nowrap; }
     .score-badge.green { background: #dcfce7; color: #15803d; }
     .score-badge.blue { background: #e0f2fe; color: #0369a1; }
     .score-badge.orange { background: #ffedd5; color: #c2410c; }
 
-    .rec-body { display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
-    .rec-field { display: flex; align-items: center; gap: 6px; }
+    .rec-body { display: flex; flex-direction: column; gap: 5px; font-size: 11.5px; color: var(--text-muted); margin-bottom: 10px; }
+    .rec-field { display: flex; align-items: center; gap: 5px; }
     .rec-field strong { color: var(--text); }
-    .rec-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
-    .tag-chip { font-size: 10.5px; padding: 2px 7px; border-radius: 4px; background: #f1f5f9; color: #475569; font-weight: 600; }
+    .rec-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+    .tag-chip { font-size: 10px; padding: 2px 6px; border-radius: 4px; background: #f1f5f9; color: #475569; font-weight: 600; }
     .tag-chip.hq { background: #d1fae5; color: #065f46; font-weight: 700; }
     .tag-chip.petro { background: #dbeafe; color: #1e40af; }
 
     .retire-box {
       background: var(--warning-light); border: 1px solid #fed7aa;
-      border-radius: 8px; padding: 10px 12px; margin-top: 8px; font-size: 11.5px;
+      border-radius: 6px; padding: 8px 10px; margin-top: 6px; font-size: 11px;
     }
     .retire-box .holder-name { font-weight: 800; color: #9a3412; }
     .retire-box .years-left { color: #c2410c; font-weight: 700; }
 
     /* Department Ranking Cards */
     .dept-rank-card {
-      background: #ffffff; border: 1px solid var(--border); border-radius: 14px;
-      padding: 20px; margin-bottom: 16px; display: flex; gap: 20px; align-items: flex-start;
-      transition: all 0.25s;
+      background: #ffffff; border: 1px solid var(--border); border-radius: 12px;
+      padding: 16px; margin-bottom: 12px; display: flex; gap: 14px; align-items: flex-start;
+      transition: all 0.2s;
     }
-    .dept-rank-card:hover { border-color: var(--accent); box-shadow: 0 6px 16px rgba(0,0,0,0.04); }
+    .dept-rank-card:hover { border-color: var(--accent); box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
     .rank-number {
-      width: 48px; height: 48px; border-radius: 12px;
+      width: 40px; height: 40px; border-radius: 10px;
       background: linear-gradient(135deg, #0b2545, #134074);
       color: white; display: flex; align-items: center; justify-content: center;
-      font-size: 20px; font-weight: 900; flex-shrink: 0;
+      font-size: 17px; font-weight: 900; flex-shrink: 0;
     }
     .dept-rank-card:nth-child(1) .rank-number { background: linear-gradient(135deg, #0284c7, #38bdf8); }
     .dept-rank-card:nth-child(2) .rank-number { background: linear-gradient(135deg, #d97706, #fbbf24); color: #0f172a; }
     .dept-rank-card:nth-child(3) .rank-number { background: linear-gradient(135deg, #16a34a, #4ade80); }
 
     .dept-rank-content { flex: 1; }
-    .dept-header-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
-    .dept-name { font-size: 16px; font-weight: 800; color: var(--primary); }
-    .dept-priority-badge { font-size: 11.5px; font-weight: 800; padding: 3px 10px; border-radius: 20px; background: #e0f2fe; color: #0369a1; }
-    .dept-desc { font-size: 13px; color: #334155; line-height: 1.6; margin-bottom: 10px; }
-    .dept-units-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #475569; }
+    .dept-header-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 6px; }
+    .dept-name { font-size: 14.5px; font-weight: 800; color: var(--primary); }
+    .dept-priority-badge { font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 15px; background: #e0f2fe; color: #0369a1; }
+    .dept-desc { font-size: 12px; color: #334155; line-height: 1.5; margin-bottom: 8px; }
+    .dept-units-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; font-size: 11px; color: #475569; }
 
     /* Tables */
-    .table-responsive { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); }
-    .custom-table { width: 100%; border-collapse: collapse; font-size: 12.5px; text-align: right; }
-    .custom-table th { background: #f1f5f9; color: var(--primary); font-weight: 800; padding: 11px 14px; border-bottom: 2px solid var(--border); white-space: nowrap; }
-    .custom-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
+    .table-responsive { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border); }
+    .custom-table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: right; }
+    .custom-table th { background: #f1f5f9; color: var(--primary); font-weight: 800; padding: 10px 12px; border-bottom: 2px solid var(--border); white-space: nowrap; }
+    .custom-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--text); }
     .custom-table tr:hover { background: #f8fafc; }
     .custom-table tr.near-ret-row { background: #fff7ed; }
-    .status-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+    .status-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px; border-radius: 4px; font-size: 10.5px; font-weight: 700; }
     .status-badge.vacant { background: #fee2e2; color: #991b1b; }
     .status-badge.active { background: #dcfce7; color: #166534; }
-    .countdown-tag { background: #ef4444; color: white; padding: 2px 8px; border-radius: 20px; font-size: 10.5px; font-weight: 800; display: inline-block; white-space: nowrap; }
+    .countdown-tag { background: #ef4444; color: white; padding: 2px 6px; border-radius: 15px; font-size: 10px; font-weight: 800; display: inline-block; white-space: nowrap; }
     .countdown-tag.warning { background: #ea580c; }
     .countdown-tag.gold { background: #d97706; }
 
     /* Filter Bar */
     .filter-bar {
-      background: #f8fafc; border: 1px solid var(--border); border-radius: 12px;
-      padding: 12px 16px; margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+      background: #f8fafc; border: 1px solid var(--border); border-radius: 10px;
+      padding: 10px 12px; margin-bottom: 14px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
     }
-    .search-input-wrap { flex: 1; min-width: 220px; position: relative; }
-    .search-input-wrap i { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
-    .search-input-wrap input { width: 100%; padding: 9px 38px 9px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; }
-    .filter-select { padding: 9px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 12.5px; background: white; outline: none; }
+    .search-input-wrap { flex: 1; min-width: 180px; position: relative; }
+    .search-input-wrap i { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 12px; }
+    .search-input-wrap input { width: 100%; padding: 8px 32px 8px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; outline: none; }
+    .filter-select { padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; background: white; outline: none; }
 
+    /* Responsive Mobile Rules */
     @media (max-width: 1024px) {
       :root { --sidebar-w: 0px; }
       .sidebar { transform: translateX(100%); width: 280px; }
       .sidebar.open { transform: translateX(0); }
-      .main-wrapper { margin-right: 0; }
+      .sidebar-close-btn { display: block; }
+      .main-wrapper { margin-right: 0; padding-bottom: 74px; }
+      .hamburger-btn { display: flex; }
+      .mobile-quick-tabs { display: flex; }
+      .mobile-bottom-nav { display: flex; }
+      .content-area { padding: 14px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Sidebar Navigation -->
+  <!-- Overlay for Mobile Sidebar Drawer -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+  <!-- Sidebar Navigation Drawer -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <div class="logo-icon"><i class="fa-solid fa-chart-pie"></i></div>
-      <div>
-        <h2>نظام المسؤوليات 2026</h2>
-        <span>ترشيحات مقر الشركة بالدورة</span>
+      <div class="sidebar-logo-wrap">
+        <div class="logo-icon"><i class="fa-solid fa-chart-pie"></i></div>
+        <div>
+          <h2>نظام المسؤوليات 2026</h2>
+          <span>ترشيحات مقر الشركة بالدورة</span>
+        </div>
       </div>
+      <button class="sidebar-close-btn" onclick="closeSidebar()"><i class="fa-solid fa-xmark"></i></button>
     </div>
 
     <ul class="nav-list">
@@ -363,23 +496,45 @@
     
     <!-- Topbar -->
     <header class="topbar">
-      <div style="display: flex; align-items: center; gap: 14px;">
-        <button class="btn btn-outline" style="padding: 6px 12px; display: none;" id="mobile-toggle" onclick="toggleSidebar()">
+      <div class="topbar-left">
+        <button class="hamburger-btn" onclick="openSidebar()" title="القائمة الرئيسية">
           <i class="fa-solid fa-bars"></i>
         </button>
         <div class="topbar-title">
           <h1 id="page-title">ملف المهندسة هدى حامد مصطاف مطلك</h1>
-          <p id="page-subtitle">ترشيحات حصرية داخل مقر الشركة العام ومقرات الهيئات بالدورة (مستبعد منها المستودعات ومحطات الضخ)</p>
+          <p id="page-subtitle">ترشيحات حصرية داخل مقر الشركة العام ومقرات الهيئات بالدورة</p>
         </div>
       </div>
 
       <div class="topbar-actions">
         <button class="btn btn-outline" onclick="window.print()">
           <i class="fa-solid fa-print"></i>
-          <span>طباعة التقرير</span>
+          <span style="display:none; @media(min-width:600px){display:inline;}">طباعة</span>
         </button>
       </div>
     </header>
+
+    <!-- Mobile Horizontal Quick Scroll Tabs -->
+    <div class="mobile-quick-tabs" id="mobile-quick-tabs">
+      <button class="quick-tab-chip active" onclick="switchTab('hoda-profile')">
+        <i class="fa-solid fa-user-check"></i> ملف هدى
+      </button>
+      <button class="quick-tab-chip" onclick="switchTab('dept-rankings')">
+        <i class="fa-solid fa-ranking-star"></i> أولوية الأقسام (9)
+      </button>
+      <button class="quick-tab-chip" onclick="switchTab('hq-vacancies')">
+        <i class="fa-solid fa-building"></i> شواغر المقر (14)
+      </button>
+      <button class="quick-tab-chip" onclick="switchTab('hq-succession')">
+        <i class="fa-solid fa-user-clock"></i> إحلال المقر (20)
+      </button>
+      <button class="quick-tab-chip" onclick="switchTab('all-masooliat')">
+        <i class="fa-solid fa-sitemap"></i> كافة المسؤوليات
+      </button>
+      <button class="quick-tab-chip" onclick="switchTab('wokala')">
+        <i class="fa-solid fa-users-gear"></i> الوكلاء والممنوعين
+      </button>
+    </div>
 
     <!-- Main Content Area -->
     <main class="content-area">
@@ -391,13 +546,13 @@
         
         <!-- Strict Filter Notice Alert -->
         <div class="hq-exclusive-alert">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <i class="fa-solid fa-circle-check" style="color: #059669; font-size: 20px;"></i>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-circle-check" style="color: #059669; font-size: 18px;"></i>
             <div class="alert-text">
-              تم استبعاد كافة المستودعات ومحطات الضخ والمواقع الخارجية؛ كافة الترشيحات أدناه داخل <strong>مقر الشركة العام ومقرات الهيئات بالدورة (بغداد)</strong> حصراً.
+              تم استبعاد كافة المستودعات ومحطات الضخ؛ كافة الترشيحات أدناه داخل <strong>مقر الشركة ومجمع الدورة (بغداد)</strong> حصراً.
             </div>
           </div>
-          <span class="hq-badge"><i class="fa-solid fa-location-dot"></i> مقر الشركة (الدورة)</span>
+          <span class="hq-badge"><i class="fa-solid fa-location-dot"></i> مقر الدورة</span>
         </div>
 
         <!-- Candidate Hero Banner -->
@@ -410,17 +565,16 @@
               <div class="candidate-titles">
                 <h2>هدى حامد مصطاف مطلك المرسومي</h2>
                 <div class="badge-row">
-                  <span class="candidate-badge gold"><i class="fa-solid fa-id-card"></i> رقم التسجيل: 10073</span>
+                  <span class="candidate-badge gold"><i class="fa-solid fa-id-card"></i> 10073</span>
                   <span class="candidate-badge cyan"><i class="fa-solid fa-graduation-cap"></i> بكالوريوس هندسة نفط</span>
-                  <span class="candidate-badge"><i class="fa-solid fa-award"></i> مهندس أقدم (الدرجة الخامسة)</span>
-                  <span class="candidate-badge"><i class="fa-solid fa-building"></i> ملاك دائم</span>
+                  <span class="candidate-badge"><i class="fa-solid fa-award"></i> مهندس أقدم (الخامسة)</span>
                 </div>
               </div>
             </div>
 
             <div style="text-align: left;">
-              <span class="candidate-badge" style="background: rgba(16, 185, 129, 0.2); border-color: #10b981; color: #a7f3d0; font-size: 13px;">
-                <i class="fa-solid fa-check-circle"></i> ترشيح حصري: مسؤولة وحدة بمقر الشركة
+              <span class="candidate-badge" style="background: rgba(16, 185, 129, 0.25); border-color: #10b981; color: #a7f3d0; font-size: 12px;">
+                <i class="fa-solid fa-check-circle"></i> ترشيح: مسؤولة وحدة بمقر الشركة
               </span>
             </div>
           </div>
@@ -435,16 +589,16 @@
               <span>1996-05-02 (العمر: 30 سنة)</span>
             </div>
             <div class="cand-item">
-              <label>تاريخ المباشرة / التعيين</label>
+              <label>المباشرة / التعيين</label>
               <span>2022-11-01</span>
             </div>
             <div class="cand-item">
               <label>الموقع الحالي</label>
-              <span>مقر الدورة (مكتب المدير العام)</span>
+              <span>مقر الدورة (المدير العام)</span>
             </div>
             <div class="cand-item">
-              <label>الشعبة وطبيعة العمل الحالي</label>
-              <span>المتابعة المركزية (إداري وفني وتدقيق)</span>
+              <label>طبيعة العمل الحالي</label>
+              <span>المتابعة المركزية (إداري وفني)</span>
             </div>
             <div class="cand-item">
               <label>الرقم الوظيفي</label>
@@ -457,18 +611,18 @@
         <div class="sub-tabs-wrap">
           <button class="sub-tab-btn active" onclick="switchHodaSubTab('vacancies-hq')">
             <i class="fa-solid fa-bullseye"></i>
-            <span>شواغر المقر العام المتاحة (مسؤولة وحدة)</span>
-            <span class="badge-pill" id="hoda-hq-vac-pill">14 شاغر بالمقر</span>
+            <span>شواغر المقر (مسؤولة وحدة)</span>
+            <span class="badge-pill" id="hoda-hq-vac-pill">14 شاغر</span>
           </button>
           <button class="sub-tab-btn" onclick="switchHodaSubTab('dept-priorities')">
             <i class="fa-solid fa-ranking-star"></i>
-            <span>ترتيب أقسام المقر للنقل حسب الأولوية</span>
-            <span class="badge-pill">9 أقسام بالمقر</span>
+            <span>أولوية أقسام المقر للنقل</span>
+            <span class="badge-pill">9 أقسام</span>
           </button>
           <button class="sub-tab-btn" onclick="switchHodaSubTab('succession-hq')">
             <i class="fa-solid fa-user-clock"></i>
-            <span>إحلال المقر العام (تقاعد حتى 2029)</span>
-            <span class="badge-pill" id="hoda-hq-succ-pill">20 منصب بالمقر</span>
+            <span>إحلال المقر (تقاعد حتى 2029)</span>
+            <span class="badge-pill" id="hoda-hq-succ-pill">20 منصب</span>
           </button>
         </div>
 
@@ -477,11 +631,10 @@
           <div class="card">
             <div class="card-header">
               <h3><i class="fa-solid fa-building"></i> الشواغر المباشرة داخل مقر الشركة العام (الدورة)</h3>
-              <span style="font-size: 12px; color: #047857; font-weight: 700;">
+              <span style="font-size: 11.5px; color: #047857; font-weight: 700;">
                 <i class="fa-solid fa-check"></i> مستبعد منها كافة المستودعات والمحطات
               </span>
             </div>
-
             <div class="rec-grid" id="hoda-hq-vacancies-grid"></div>
           </div>
         </div>
@@ -491,9 +644,8 @@
           <div class="card">
             <div class="card-header">
               <h3><i class="fa-solid fa-ranking-star"></i> الترتيب الاستراتيجي لأقسام المقر العام للنقل والملاءمة</h3>
-              <span style="font-size: 12px; color: var(--text-muted);">مرتبة من الأولوية القصوى إلى المتاحة (كافة الأقسام داخل مجمع الدورة)</span>
+              <span style="font-size: 11.5px; color: var(--text-muted);">كافة الأقسام داخل مجمع الدورة مرتبة حسب الأولوية</span>
             </div>
-
             <div id="dept-ranking-container"></div>
           </div>
         </div>
@@ -503,9 +655,8 @@
           <div class="card">
             <div class="card-header">
               <h3><i class="fa-solid fa-user-clock"></i> خطة الإحلال والتعويض داخل مقر الشركة (تقاعد خلال 1 إلى 3 سنوات)</h3>
-              <span class="countdown-tag warning"><i class="fa-solid fa-calendar-days"></i> مسؤولو وحدات بمقر الشركة مواليد 1966 إلى 1969</span>
+              <span class="countdown-tag warning"><i class="fa-solid fa-calendar-days"></i> مسؤولو وحدات بالمقر مواليد 1966 إلى 1969</span>
             </div>
-
             <div class="rec-grid" id="hoda-hq-succession-grid"></div>
           </div>
         </div>
@@ -519,7 +670,7 @@
         <div class="card">
           <div class="card-header">
             <h3><i class="fa-solid fa-ranking-star"></i> الترتيب الاستراتيجي لأقسام مقر الشركة بالدورة للنقل والترشيح</h3>
-            <span style="font-size: 12.5px; color: var(--accent); font-weight: bold;">9 أقسام رئيسية بالمقر العام</span>
+            <span style="font-size: 12px; color: var(--accent); font-weight: bold;">9 أقسام رئيسية بالمقر العام</span>
           </div>
           <div id="dept-ranking-direct-container"></div>
         </div>
@@ -532,7 +683,7 @@
         <div class="card">
           <div class="card-header">
             <h3><i class="fa-solid fa-briefcase"></i> دليل شواغر مسؤولي الوحدات بمقر الشركة (الدورة)</h3>
-            <button class="btn btn-outline btn-sm" onclick="exportTableToCSV('hq-vac-table', 'شواغر_مقر_الشركة_2026.csv')">
+            <button class="btn btn-outline" style="font-size:11.5px;" onclick="exportTableToCSV('hq-vac-table', 'شواغر_مقر_الشركة_2026.csv')">
               <i class="fa-solid fa-download"></i> تصدير CSV
             </button>
           </div>
@@ -592,8 +743,8 @@
       <section id="tab-all-masooliat" class="tab-section">
         <div class="card">
           <div class="card-header">
-            <h3><i class="fa-solid fa-sitemap"></i> قاعدة بيانات المسؤوليات الشاملة 2026</h3>
-            <span style="font-size: 13px; font-weight: 700; color: var(--accent);">1,447 سجلاً</span>
+            <h3><i class="fa-solid fa-sitemap"></i> كافة المسؤوليات بالشركة 2026</h3>
+            <span style="font-size: 12px; font-weight: 700; color: var(--accent);">1,447 سجلاً</span>
           </div>
 
           <div class="filter-bar">
@@ -635,7 +786,7 @@
       <!-- TAB 6: WOKALA & FORBIDDEN -->
       <!-- ============================================================= -->
       <section id="tab-wokala" class="tab-section">
-        <div class="card" style="border-right: 5px solid #dc2626;">
+        <div class="card" style="border-right: 4px solid #dc2626;">
           <div class="card-header">
             <h3 style="color: #b91c1c;"><i class="fa-solid fa-ban" style="color: #dc2626;"></i> قائمة الموظفين الممنوعين من تولي المهام الإدارية (2026)</h3>
             <span class="status-badge vacant">7 حالات موثقة</span>
@@ -659,7 +810,7 @@
         <div class="card">
           <div class="card-header">
             <h3><i class="fa-solid fa-users-gear"></i> دليل جدول الوكلاء والتكليفات 2026</h3>
-            <span style="font-size: 13px; font-weight: 700; color: var(--accent);">386 سجلاً</span>
+            <span style="font-size: 12px; font-weight: 700; color: var(--accent);">386 سجلاً</span>
           </div>
           <div class="table-responsive">
             <table class="custom-table">
@@ -686,6 +837,32 @@
     </main>
   </div>
 
+  <!-- Fixed Bottom Navigation Bar for Mobile Phones -->
+  <nav class="mobile-bottom-nav" id="mobile-bottom-nav">
+    <div class="bottom-nav-item active" onclick="switchTab('hoda-profile')">
+      <i class="fa-solid fa-user-check"></i>
+      <span>ملف هدى</span>
+    </div>
+    <div class="bottom-nav-item" onclick="switchTab('dept-rankings')">
+      <i class="fa-solid fa-ranking-star"></i>
+      <span>الأقسام</span>
+    </div>
+    <div class="bottom-nav-item" onclick="switchTab('hq-vacancies')">
+      <i class="fa-solid fa-building"></i>
+      <span>الشواغر</span>
+      <span class="bottom-badge">14</span>
+    </div>
+    <div class="bottom-nav-item" onclick="switchTab('hq-succession')">
+      <i class="fa-solid fa-user-clock"></i>
+      <span>الإحلال</span>
+      <span class="bottom-badge" style="background:#ea580c;">20</span>
+    </div>
+    <div class="bottom-nav-item" onclick="openSidebar()">
+      <i class="fa-solid fa-bars"></i>
+      <span>المزيد</span>
+    </div>
+  </nav>
+
   <script>
     const data = window.APP_DATA || {};
     const responsibilities = data.responsibilities || [];
@@ -706,17 +883,31 @@
     });
 
     function switchTab(tabId) {
+      // Sidebar items
       document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.tab-section').forEach(el => el.classList.remove('active'));
-      
       const targetNav = Array.from(document.querySelectorAll('.nav-item')).find(el => el.getAttribute('onclick')?.includes(tabId));
       if (targetNav) targetNav.classList.add('active');
 
+      // Bottom nav items
+      document.querySelectorAll('.bottom-nav-item').forEach(el => el.classList.remove('active'));
+      const targetBottom = Array.from(document.querySelectorAll('.bottom-nav-item')).find(el => el.getAttribute('onclick')?.includes(tabId));
+      if (targetBottom) targetBottom.classList.add('active');
+
+      // Quick tab chips
+      document.querySelectorAll('.quick-tab-chip').forEach(el => el.classList.remove('active'));
+      const targetChip = Array.from(document.querySelectorAll('.quick-tab-chip')).find(el => el.getAttribute('onclick')?.includes(tabId));
+      if (targetChip) {
+        targetChip.classList.add('active');
+        targetChip.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+
+      // Sections
+      document.querySelectorAll('.tab-section').forEach(el => el.classList.remove('active'));
       const targetTab = document.getElementById(`tab-${tabId}`);
       if (targetTab) targetTab.classList.add('active');
 
       const titles = {
-        'hoda-profile': ['ملف المهندسة هدى حامد مصطاف مطلك', 'ترشيحات حصرية داخل مقر الشركة العام ومقرات الهيئات بالدورة (مستبعد منها المستودعات ومحطات الضخ)'],
+        'hoda-profile': ['ملف المهندسة هدى حامد مصطاف مطلك', 'ترشيحات حصرية داخل مقر الشركة العام ومقرات الهيئات بالدورة'],
         'dept-rankings': ['ترتيب أقسام المقر حسب الأولوية للنقل', 'قائمة بـ 9 أقسام داخل مجمع الدورة تناسب تخصصها الهندسي وخبرتها الإدارية'],
         'hq-vacancies': ['دليل شواغر وحدات المقر العام', 'حصر شواغر مسؤولي الوحدات الكائنة بمقر الشركة بالدورة حصراً'],
         'hq-succession': ['خطة الإحلال بمقر الشركة (&le; 3 سنوات)', 'مسؤولو وحدات بمقر الشركة بالدورة محالين للتقاعد بين 2026 و 2029'],
@@ -729,12 +920,18 @@
         document.getElementById('page-subtitle').innerText = titles[tabId][1];
       }
 
-      document.getElementById('sidebar').classList.remove('open');
+      closeSidebar();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('open');
+    function openSidebar() {
+      document.getElementById('sidebar').classList.add('open');
+      document.getElementById('sidebar-overlay').classList.add('active');
+    }
+
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebar-overlay').classList.remove('active');
     }
 
     function switchHodaSubTab(subId) {
@@ -748,7 +945,6 @@
       if (content) content.style.display = 'block';
     }
 
-    // Render HQ Vacancies Cards
     function renderHqVacanciesCards(items) {
       const grid = document.getElementById('hoda-hq-vacancies-grid');
       document.getElementById('hoda-hq-vac-pill').innerText = `${items.length} شاغر بالمقر`;
@@ -764,7 +960,7 @@
             <div class="rec-field"><i class="fa-solid fa-building" style="color:#0284c7; width:16px;"></i> <span><strong>القسم:</strong> ${v.dept || 'مقر الهيئة'}</span></div>
             <div class="rec-field"><i class="fa-solid fa-layer-group" style="color:#0284c7; width:16px;"></i> <span><strong>الهيئة:</strong> ${v.body || '-'}</span></div>
             <div class="rec-field"><i class="fa-solid fa-network-wired" style="color:#0284c7; width:16px;"></i> <span><strong>التشكيل:</strong> ${v.formation || '-'}</span></div>
-            <div style="font-size:11.5px; color:#475569; margin-top:4px; line-height:1.4;">
+            <div style="font-size:11px; color:#475569; margin-top:3px; line-height:1.35;">
               <i class="fa-solid fa-circle-info" style="color:#0284c7;"></i> ${v.rationale}
             </div>
             <div class="rec-tags">
@@ -772,14 +968,13 @@
               <span class="tag-chip petro">${v.category}</span>
             </div>
           </div>
-          <div style="margin-top:auto; padding-top:10px; border-top:1px dashed var(--border); font-size:11px; color:#16a34a; font-weight:700;">
-            <i class="fa-solid fa-check-double"></i> المنصب شاغر حالياً بالمقر - جاهز للترشيح
+          <div style="margin-top:auto; padding-top:8px; border-top:1px dashed var(--border); font-size:10.5px; color:#16a34a; font-weight:700;">
+            <i class="fa-solid fa-check-double"></i> شاغر حالياً بالمقر - جاهز للترشيح
           </div>
         </div>
       `).join('');
     }
 
-    // Render Department Rankings
     function renderDeptRankings() {
       const html = hqDeptRankings.map(d => `
         <div class="dept-rank-card">
@@ -789,21 +984,21 @@
               <div class="dept-name">${d.dept_name}</div>
               <span class="dept-priority-badge">${d.priority_level}</span>
             </div>
-            <div style="font-size:12px; color:#64748b; margin-bottom:6px;">
+            <div style="font-size:11.5px; color:#64748b; margin-bottom:5px;">
               <i class="fa-solid fa-network-wired"></i> <strong>التشكيل:</strong> ${d.formation} &nbsp;|&nbsp; 
               <i class="fa-solid fa-location-dot" style="color:#059669;"></i> <strong>الموقع:</strong> <span style="color:#059669; font-weight:700;">${d.location}</span>
             </div>
             <div class="dept-desc">
-              <strong>سبب الأولوية والملاءمة:</strong> ${d.why_suitable}
+              <strong>سبب الأولوية:</strong> ${d.why_suitable}
             </div>
             <div class="dept-units-box">
-              <div style="font-weight:700; color:var(--primary); margin-bottom:4px;">
-                <i class="fa-solid fa-sitemap"></i> الوحدات والشعب الرئيسية التابعة للقسم:
+              <div style="font-weight:700; color:var(--primary); margin-bottom:3px;">
+                <i class="fa-solid fa-sitemap"></i> الوحدات والشعب التابعة للقسم:
               </div>
-              <div style="display:flex; flex-wrap:wrap; gap:6px;">
+              <div style="display:flex; flex-wrap:wrap; gap:4px;">
                 ${d.key_units.map(u => `<span class="tag-chip" style="background:#f1f5f9; color:#334155;">${u}</span>`).join('')}
               </div>
-              <div style="margin-top:8px; font-size:11.5px; color:#15803d; font-weight:700;">
+              <div style="margin-top:6px; font-size:11px; color:#15803d; font-weight:700;">
                 <i class="fa-solid fa-star"></i> ميزة النقل المباشرة بالمقر: ${d.transfer_advantage}
               </div>
             </div>
@@ -815,7 +1010,6 @@
       document.getElementById('dept-ranking-direct-container').innerHTML = html;
     }
 
-    // Render HQ Succession Cards
     function renderHqSuccessionCards(items) {
       const grid = document.getElementById('hoda-hq-succession-grid');
       document.getElementById('hoda-hq-succ-pill').innerText = `${items.length} منصب بالمقر`;
@@ -837,21 +1031,20 @@
               <div class="rec-field"><i class="fa-solid fa-network-wired" style="color:#ea580c; width:16px;"></i> <span><strong>التشكيل:</strong> ${s.formation || '-'}</span></div>
               <div class="retire-box">
                 <div>المسؤول الحالي: <span class="holder-name">${s.name}</span> (${s.job_title || '-'})</div>
-                <div class="years-left">سنة التولد: ${s.birth_year} &bull; سنة التقاعد القانونية: <strong>${s.retirement_year}</strong></div>
+                <div class="years-left">سنة التولد: ${s.birth_year} &bull; التقاعد القانوني: <strong>${s.retirement_year}</strong></div>
               </div>
               <div class="rec-tags">
                 <span class="tag-chip hq"><i class="fa-solid fa-location-dot"></i> داخل مقر الشركة بالدورة</span>
               </div>
             </div>
-            <div style="margin-top:auto; padding-top:10px; border-top:1px dashed var(--border); font-size:11.5px; color:#c2410c; font-weight:700;">
-              <i class="fa-solid fa-arrow-right-arrow-left"></i> خطة الإحلال: النقل للوحدة بالمقر والتأهيل لاستلام المسؤولية
+            <div style="margin-top:auto; padding-top:8px; border-top:1px dashed var(--border); font-size:10.5px; color:#c2410c; font-weight:700;">
+              <i class="fa-solid fa-arrow-right-arrow-left"></i> خطة الإحلال: النقل للوحدة بالمقر والتأهيل للمسؤولية
             </div>
           </div>
         `;
       }).join('');
     }
 
-    // Render HQ Vacancies Table
     function renderHqVacanciesTable(items) {
       const tbody = document.getElementById('hq-vacancies-tbody');
       tbody.innerHTML = items.map((v, i) => `
@@ -861,20 +1054,19 @@
           <td>${v.dept || '-'}</td>
           <td>${v.body || '-'}</td>
           <td>${v.formation || '-'}</td>
-          <td><span class="tag-chip hq">مقر الشركة (الدورة)</span></td>
+          <td><span class="tag-chip hq">مقر الدورة</span></td>
           <td><span class="status-badge active">${v.category}</span></td>
         </tr>
       `).join('');
     }
 
-    // Render HQ Succession Table
     function renderHqSuccessionTable(items) {
       const tbody = document.getElementById('hq-succession-tbody');
       tbody.innerHTML = items.map(s => `
         <tr class="near-ret-row">
           <td style="font-weight: 700;">${s.reg_no || '-'}</td>
           <td style="font-weight: 800; color: #9a3412;">${s.name}</td>
-          <td>${s.job_title || '-'} <span style="font-size:11px; color:#64748b;">(${s.grade || '-'})</span></td>
+          <td>${s.job_title || '-'} <span style="font-size:10.5px; color:#64748b;">(${s.grade || '-'})</span></td>
           <td>${s.birth_year || '-'}</td>
           <td>
             <span class="countdown-tag ${s.years_to_retirement <= 0 ? '' : (s.years_to_retirement === 1 ? 'warning' : 'gold')}">
@@ -888,12 +1080,9 @@
       `).join('');
     }
 
-    // Render All Masooliat
     function renderAllMasooliatTable(items) {
       const tbody = document.getElementById('all-masooliat-tbody');
-      const displayItems = items.slice(0, 150);
-
-      tbody.innerHTML = displayItems.map(r => {
+      tbody.innerHTML = items.slice(0, 150).map(r => {
         let is3yrRet = r.birth_year && (r.birth_year + 60 - 2026 <= 3);
         let rowClass = is3yrRet ? 'near-ret-row' : '';
         return `
@@ -902,7 +1091,7 @@
             <td style="font-weight: 800; color: ${r.is_vacant ? '#dc2626' : 'var(--primary)'};">
               ${r.is_vacant ? '<span class="status-badge vacant">منصب شاغر</span>' : r.name}
             </td>
-            <td>${r.job_title || '-'} ${r.grade ? `<span style="font-size:11px; color:#64748b;">(${r.grade})</span>` : ''}</td>
+            <td>${r.job_title || '-'} ${r.grade ? `<span style="font-size:10.5px; color:#64748b;">(${r.grade})</span>` : ''}</td>
             <td>${r.qualification || '-'}</td>
             <td style="font-weight: 700;">${r.position}</td>
             <td>${r.dept || '-'}</td>
@@ -912,7 +1101,7 @@
               ${r.birth_year ? `${r.birth_year} ` : '-'}
               ${is3yrRet ? `<span class="countdown-tag warning" style="font-size:9px;">تقاعد ${r.birth_year + 60}</span>` : ''}
             </td>
-            <td style="font-size:11.5px; color:#64748b;">${r.notes || r.other || '-'}</td>
+            <td style="font-size:11px; color:#64748b;">${r.notes || r.other || '-'}</td>
           </tr>
         `;
       }).join('');
@@ -938,7 +1127,6 @@
       renderAllMasooliatTable(filtered);
     }
 
-    // Render Wokala and Forbidden
     function renderWokalaAndForbidden() {
       document.getElementById('forbidden-tbody').innerHTML = forbiddenList.map(f => `
         <tr>
@@ -946,7 +1134,7 @@
           <td>${f.workplace}</td>
           <td style="color: #dc2626; font-weight: 700;">${f.reason}</td>
           <td>${f.letter_no}</td>
-          <td style="font-size: 11.5px; color: #475569;">${f.action_taken}</td>
+          <td style="font-size: 11px; color: #475569;">${f.action_taken}</td>
         </tr>
       `).join('');
 
@@ -963,7 +1151,7 @@
           <td>${w.body || '-'}</td>
           <td>${w.dept || '-'}</td>
           <td>${w.assigned_date || '-'}</td>
-          <td style="font-size:11.5px; color:#64748b;">${w.notes || '-'}</td>
+          <td style="font-size:11px; color:#64748b;">${w.notes || '-'}</td>
         </tr>
       `).join('');
     }
