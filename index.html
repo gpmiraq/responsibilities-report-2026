@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نظام تحليل المسؤوليات والإحلال الوظيفي | تقرير الترشيح الاستراتيجي</title>
+  
+  <!-- Google Fonts: Cairo & Tajawal -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Embedded Data -->
+  <script src="data.js"></script>
+
+  <style>
+    :root {
+      --primary: #0f2b48;
+      --primary-light: #1e3a5f;
+      --accent: #0284c7;
+      --accent-glow: rgba(2, 132, 199, 0.2);
+      --gold: #d97706;
+      --gold-light: #fef3c7;
+      --gold-border: #fcd34d;
+      --danger: #dc2626;
+      --danger-bg: #fee2e2;
+      --danger-border: #fca5a5;
+      --success: #16a34a;
+      --success-bg: #dcfce7;
+      --warning: #ea580c;
+      --warning-bg: #ffedd5;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --sidebar-w: 280px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', 'Tajawal', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: linear-gradient(180deg, #0b1f36 0%, #0f2b48 100%);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      z-index: 100;
+      box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 24px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .sidebar-header .logo-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: white;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+    }
+
+    .sidebar-header h2 {
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    .sidebar-header span {
+      font-size: 11px;
+      color: #94a3b8;
+      display: block;
+      font-weight: 400;
+    }
+
+    .nav-list {
+      list-style: none;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      color: #cbd5e1;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .nav-item:hover {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      transform: translateX(-4px);
+    }
+
+    .nav-item.active {
+      background: linear-gradient(90deg, #0284c7, #0369a1);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+    }
+
+    .nav-item i {
+      font-size: 18px;
+      width: 22px;
+      text-align: center;
+    }
+
+    .nav-badge {
+      margin-right: auto;
+      background: rgba(255,255,255,0.15);
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 700;
+    }
+
+    .nav-badge.danger {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .nav-badge.special {
+      background: #f59e0b;
+      color: #1e293b;
+    }
+
+    .sidebar-footer {
+      padding: 16px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-size: 12px;
+      color: #94a3b8;
+      text-align: center;
+    }
+
+    /* Main Content */
+    .main-wrapper {
+      margin-right: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    /* Top Bar */
+    .topbar {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .topbar-title h1 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .topbar-title p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-light);
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn-accent:hover {
+      background: #0369a1;
+    }
+
+    .btn-gold {
+      background: #f59e0b;
+      color: white;
+    }
+
+    .btn-outline {
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .btn-outline:hover {
+      background: var(--bg);
+    }
+
+    /* Content Area */
+    .content-area {
+      padding: 28px;
+      flex: 1;
+    }
+
+    /* Tab Sections */
+    .tab-section {
+      display: none;
+    }
+
+    .tab-section.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cards & Grids */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.06);
+    }
+
+    .stat-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .stat-info h3 {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--primary);
+      line-height: 1.1;
+    }
+
+    .stat-info p {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    /* Special Candidate Hero */
+    .candidate-hero {
+      background: linear-gradient(135deg, #0b2545 0%, #134074 50%, #1d4e89 100%);
+      border-radius: 20px;
+      padding: 32px;
+      color: white;
+      margin-bottom: 28px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(11, 37, 69, 0.25);
+    }
+
+    .candidate-hero::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -20%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.2) 0%, rgba(255,255,255,0) 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .candidate-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .candidate-main-info {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .candidate-avatar {
+      width: 84px;
+      height: 84px;
+      background: linear-gradient(135deg, #38bdf8, #0284c7);
+      border: 4px solid rgba(255,255,255,0.2);
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 38px;
+      color: white;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    .candidate-titles h2 {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+    }
+
+    .candidate-titles .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .candidate-badge {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+      padding: 4px 12px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .candidate-badge.gold {
+      background: #f59e0b;
+      color: #0f172a;
+      border-color: #fbbf24;
+    }
+
+    .candidate-badge.cyan {
+      background: #0284c7;
+      color: white;
+      border-color: #38bdf8;
+    }
+
+    .candidate-details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.15);
+      position: relative;
+      z-index: 2;
+    }
+
+    .cand-item {
+      background: rgba(255,255,255,0.08);
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .cand-item label {
+      font-size: 11px;
+      color: #94a3b8;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .cand-item span {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card-header h3 {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-header h3 i {
+      color: var(--accent);
+    }
+
+    /* Recommendation Cards */
+    .rec-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 18px;
+    }
+
+    .rec-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rec-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 20px rgba(2, 132, 199, 0.08);
+    }
+
+    .rec-card.high-match {
+      border-right: 5px solid #16a34a;
+    }
+
+    .rec-card.medium-match {
+      border-right: 5px solid #0284c7;
+    }
+
+    .rec-card.retire-alert {
+      border-right: 5px solid #ea580c;
+      background: #fffdfa;
+    }
+
+    .rec-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .rec-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.3;
+    }
+
+    .score-badge {
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    .rec-body {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .rec-field {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .rec-field strong {
+      color: var(--text);
+    }
+
+    .rec-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .tag-chip {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: #f1f5f9;
+      color: #475569;
+      font-weight: 600;
+    }
+
+    .tag-chip.petro {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .tag-chip.central {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .retire-box {
+      background: var(--warning-bg);
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-top: 10px;
+      font-size: 11px;
+    }
+
+    .retire-box .holder-name {
+      font-weight: 800;
+      color: #9a3412;
+    }
+
+    .retire-box .years-left {
+      color: #c2410c;
+      font-weight: 700;
+    }
+
+    /* Filter Bar */
+    .filter-bar {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .search-input-wrap {
+      flex: 1;
+      min-width: 240px;
+      position: relative;
+    }
+
+    .search-input-wrap i {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+
+    .search-input-wrap input {
+      width: 100%;
+      padding: 9px 38px 9px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input-wrap input:focus {
+      border-color: var(--accent);
+    }
+
+    .filter-select {
+      padding: 9px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      background: white;
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* Data Tables */
+    .table-responsive {
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      text-align: right;
+    }
+
+    .custom-table th {
+      background: #f1f5f9;
+      color: var(--primary);
+      font-weight: 800;
+      padding: 12px 14px;
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .custom-table td {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .custom-table tr:hover {
+      background: #f8fafc;
+    }
+
+    .custom-table tr.near-ret-row {
+      background: #fff7ed;
+    }
+
+    .custom-table tr.near-ret-row:hover {
+      background: #ffedd5;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .status-badge.vacant {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .status-badge.active {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status-badge.warning {
+      background: #ffedd5;
+      color: #9a3412;
+    }
+
+    .countdown-tag {
+      background: #ef4444;
+      color: white;
+      padding: 2px 7px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 800;
+      display: inline-block;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: white;
+      border-radius: 18px;
+      max-width: 600px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      animation: modalSlide 0.25s ease;
+    }
+
+    @keyframes modalSlide {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-header h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    /* Mobile Bottom Navigation */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: var(--primary);
+      cursor: pointer;
+    }
+
+    @media (max-width: 1024px) {
+      :root {
+        --sidebar-w: 0px;
+      }
+      .sidebar {
+        transform: translateX(100%);
+        width: 280px;
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .main-wrapper {
+        margin-right: 0;
+      }
+      .mobile-menu-btn {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-icon">
+        <i class="fa-solid fa-chart-pie"></i>
+      </div>
+      <div>
+        <h2>نظام المسؤوليات 2026</h2>
+        <span>التحليل والإحلال الوظيفي</span>
+      </div>
+    </div>
+
+    <ul class="nav-list">
+      <li class="nav-item active" onclick="switchTab('hoda-profile')">
+        <i class="fa-solid fa-user-check" style="color: #38bdf8;"></i>
+        <span>ملف المهندسة هدى حامد</span>
+        <span class="nav-badge special">المستهدفة</span>
+      </li>
+      <li class="nav-item" onclick="switchTab('dashboard')">
+        <i class="fa-solid fa-gauge-high"></i>
+        <span>لوحة المؤشرات العامة</span>
+      </li>
+      <li class="nav-item" onclick="switchTab('vacancies')">
+        <i class="fa-solid fa-briefcase"></i>
+        <span>شواغر مسؤولي الوحدات</span>
+        <span class="nav-badge" id="nav-vacant-count">75</span>
+      </li>
+      <li class="nav-item" onclick="switchTab('succession')">
+        <i class="fa-solid fa-user-clock"></i>
+        <span>الإحلال للتقاعد (&lt; سنتين)</span>
+        <span class="nav-badge danger" id="nav-retire-count">52</span>
+      </li>
+      <li class="nav-item" onclick="switchTab('all-masooliat')">
+        <i class="fa-solid fa-sitemap"></i>
+        <span>دليل المسؤوليات الشامل</span>
+      </li>
+      <li class="nav-item" onclick="switchTab('wokala')">
+        <i class="fa-solid fa-users-gear"></i>
+        <span>جدول الوكلاء والممنوعين</span>
+      </li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <div>بيانات الملاك الدائم والعقود 315</div>
+      <div style="margin-top: 4px; font-weight: bold; color: #cbd5e1;">تحديث عام 2026</div>
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="main-wrapper">
+    
+    <!-- Topbar -->
+    <header class="topbar">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="topbar-title">
+          <h1 id="page-title">ملف المهندسة هدى حامد مصطاف مطلك</h1>
+          <p id="page-subtitle">دراسة الترشيح لمسؤولية وحدة ومطابقة التخصص وخطة الإحلال والتعويض</p>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <button class="btn btn-outline" onclick="window.print()">
+          <i class="fa-solid fa-print"></i>
+          <span>طباعة التقرير</span>
+        </button>
+        <button class="btn btn-accent" onclick="exportCandidateReport()">
+          <i class="fa-solid fa-file-export"></i>
+          <span>تصدير الملخص</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="content-area">
+
+      <!-- ============================================================= -->
+      <!-- TAB 1: HODA PROFILE & TARGET RECOMMENDATIONS -->
+      <!-- ============================================================= -->
+      <section id="tab-hoda-profile" class="tab-section active">
+        
+        <!-- Candidate Hero Banner -->
+        <div class="candidate-hero">
+          <div class="candidate-top">
+            <div class="candidate-main-info">
+              <div class="candidate-avatar">
+                <i class="fa-solid fa-user-tie"></i>
+              </div>
+              <div class="candidate-titles">
+                <h2>هدى حامد مصطاف مطلك المرسومي</h2>
+                <div class="badge-row">
+                  <span class="candidate-badge gold"><i class="fa-solid fa-id-card"></i> رقم التسجيل: 10073</span>
+                  <span class="candidate-badge cyan"><i class="fa-solid fa-graduation-cap"></i> بكالوريوس هندسة نفط</span>
+                  <span class="candidate-badge"><i class="fa-solid fa-award"></i> مهندس أقدم (الدرجة الخامسة)</span>
+                  <span class="candidate-badge"><i class="fa-solid fa-building"></i> ملاك دائم</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="text-align: left;">
+              <span class="candidate-badge" style="background: rgba(16, 185, 129, 0.2); border-color: #10b981; color: #a7f3d0; font-size: 13px;">
+                <i class="fa-solid fa-check-circle"></i> مؤهلة قانونياً وفنياً لمنصب مسؤولة وحدة
+              </span>
+            </div>
+          </div>
+
+          <div class="candidate-details-grid">
+            <div class="cand-item">
+              <label>اسم الأم</label>
+              <span>أميرة جياد مطلك</span>
+            </div>
+            <div class="cand-item">
+              <label>تاريخ الميلاد</label>
+              <span>1996-05-02 (العمر: 30 سنة)</span>
+            </div>
+            <div class="cand-item">
+              <label>تاريخ المباشرة / التعيين</label>
+              <span>2022-11-01</span>
+            </div>
+            <div class="cand-item">
+              <label>الموقع الحالي</label>
+              <span>الدورة (مقر المدير العام)</span>
+            </div>
+            <div class="cand-item">
+              <label>القسم / الشعبة الحالية</label>
+              <span>شعبة المتابعة المركزية (عمل إداري ومتابعة)</span>
+            </div>
+            <div class="cand-item">
+              <label>الرقم الوظيفي</label>
+              <span>143106757</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 1: Direct Vacancies for Unit Head -->
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-bullseye"></i> أولاً: الشواغر الحالية المتاحة للترشيح المباشر (مسؤولة وحدة)</h3>
+            <span style="font-size: 12px; color: var(--text-muted);">تمت الفلترة حسب مطابقة التخصص النفطي/الفني وموقع العمل</span>
+          </div>
+
+          <div class="rec-grid" id="hoda-vacancies-grid">
+            <!-- Dynamically loaded -->
+          </div>
+        </div>
+
+        <!-- Section 2: Department Suitability Analysis -->
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-building-circle-check"></i> ثانياً: الأقسام الملائمة لعملها (مع منصب أو بدون منصب)</h3>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+            <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 18px;">
+              <h4 style="color: var(--primary); font-size: 14px; font-weight: 800; margin-bottom: 8px;">
+                <i class="fa-solid fa-oil-well" style="color: #0284c7;"></i> 1. أقسام العمليات والمستودعات النفطية
+              </h4>
+              <p style="font-size: 12.5px; color: #475569; line-height: 1.6;">
+                <strong>الملاءمة:</strong> تطابق 100% مع تخصص <strong>هندسة النفط</strong> (حسابات حركة وضخ وتفريغ المنتجات النفطية، إدارة الخزانات، ومراقبة العدادات ومنظومات الأنابيب).
+                <br><strong>الأقسام المقترحة:</strong> قسم مستودع الرصافة، مستودع الكرخ، مستودع المشاهدة، قسم العمليات بهيئة الوسط.
+              </p>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 18px;">
+              <h4 style="color: var(--primary); font-size: 14px; font-weight: 800; margin-bottom: 8px;">
+                <i class="fa-solid fa-gauge" style="color: #d97706;"></i> 2. قسم العدادات وقياسات نقل الملكية (Custody Transfer)
+              </h4>
+              <p style="font-size: 12.5px; color: #475569; line-height: 1.6;">
+                <strong>الملاءمة:</strong> يتطلب مهندسي نفط متخصصين في معايرة العدادات وضبط القياسات الحجمية والحرارية والمعيارية.
+                <br><strong>الأقسام المقترحة:</strong> قسم العدادات المركزي (الدائرة الفنية / الهيئة الهندسية).
+              </p>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 18px;">
+              <h4 style="color: var(--primary); font-size: 14px; font-weight: 800; margin-bottom: 8px;">
+                <i class="fa-solid fa-clipboard-check" style="color: #16a34a;"></i> 3. أقسام التفتيش والمتابعة المركزية والتخطيط الفني
+              </h4>
+              <p style="font-size: 12.5px; color: #475569; line-height: 1.6;">
+                <strong>الملاءمة:</strong> الاستفادة من موقعها الحالي وخبرتها الإدارية والمتابعة المركزية لدمجها مع الخبرة الهندسية للتدقيق على المشاريع وخطط الإنتاج.
+                <br><strong>الأقسام المقترحة:</strong> قسم التفتيش والمتابعة المركزي، قسم التخطيط والدراسات.
+              </p>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 18px;">
+              <h4 style="color: var(--primary); font-size: 14px; font-weight: 800; margin-bottom: 8px;">
+                <i class="fa-solid fa-fire-flame-simple" style="color: #dc2626;"></i> 4. أقسام الغاز والسيطرة النوعية والفحص الهندسي
+              </h4>
+              <p style="font-size: 12.5px; color: #475569; line-height: 1.6;">
+                <strong>الملاءمة:</strong> تخصص هندسة النفط مؤهل لإدارة وحدات السيطرة النوعية، الفحص الهندسي، وعمليات الغاز السائل وتأمين الأنابيب.
+                <br><strong>الأقسام المقترحة:</strong> قسم الغاز المنطقة الوسطى، قسم الفحص الهندسي والسلامة.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Succession & Near Retirement Plan -->
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-user-clock"></i> ثالثاً: خطة الإحلال والتعويض لمسؤولي وحدات على وشك التقاعد (خلال سنة - سنتين)</h3>
+            <span style="font-size: 12px; color: var(--text-muted);">المسؤولون الحاليون من مواليد (1966 - 1968) الذين يمكن الانتقال لوحداتهم تمهيداً لاستلام المسؤولية</span>
+          </div>
+
+          <div class="rec-grid" id="hoda-succession-grid">
+            <!-- Dynamically loaded -->
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ============================================================= -->
+      <!-- TAB 2: GENERAL DASHBOARD -->
+      <!-- ============================================================= -->
+      <section id="tab-dashboard" class="tab-section">
+        
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon" style="background: #e0f2fe; color: #0284c7;">
+              <i class="fa-solid fa-sitemap"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="stat-total-resp">1,447</h3>
+              <p>إجمالي المناصب والمسؤوليات</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon" style="background: #fee2e2; color: #dc2626;">
+              <i class="fa-solid fa-door-open"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="stat-vacant-resp">75</h3>
+              <p>شواغر مسؤولية وحدة</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon" style="background: #ffedd5; color: #ea580c;">
+              <i class="fa-solid fa-user-clock"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="stat-near-retire">52</h3>
+              <p>مسؤول وحدة متبقي له &lt; سنتين للتقاعد</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon" style="background: #fef3c7; color: #d97706;">
+              <i class="fa-solid fa-users-gear"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="stat-total-wokala">386</h3>
+              <p>مناصب الوكالة المسجلة</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 24px;">
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-chart-bar"></i> توزيع المسؤوليات حسب التشكيلات الإدارية</h3>
+            </div>
+            <div style="height: 280px;">
+              <canvas id="formationsChart"></canvas>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-chart-pie"></i> نسب مستويات المسؤولية</h3>
+            </div>
+            <div style="height: 280px;">
+              <canvas id="levelsChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ============================================================= -->
+      <!-- TAB 3: UNIT VACANCIES -->
+      <!-- ============================================================= -->
+      <section id="tab-vacancies" class="tab-section">
+        
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-briefcase"></i> دليل شواغر مسؤولي الوحدات المتاحة (75 شاغراً)</h3>
+            <button class="btn btn-outline btn-sm" onclick="exportTableToCSV('vacancies-table', 'شواغر_الوحدات_2026.csv')">
+              <i class="fa-solid fa-download"></i> تصدير CSV
+            </button>
+          </div>
+
+          <div class="filter-bar">
+            <div class="search-input-wrap">
+              <i class="fa-solid fa-search"></i>
+              <input type="text" id="vac-search" placeholder="بحث باسم المنصب، القسم، الهيئة، أو الموقع..." oninput="filterVacancies()">
+            </div>
+            <select class="filter-select" id="vac-formation-filter" onchange="filterVacancies()">
+              <option value="">جميع التشكيلات</option>
+              <option value="معاون مدير عام لشؤون العمليات">معاون شؤون العمليات</option>
+              <option value="المدير العام">المدير العام</option>
+              <option value="معاون مدير عام لشؤون عمليات الجنوب">معاون عمليات الجنوب</option>
+              <option value="معاون مدير عام للشؤون الفنية">معاون الشؤون الفنية</option>
+            </select>
+          </div>
+
+          <div class="table-responsive">
+            <table class="custom-table" id="vacancies-table">
+              <thead>
+                <tr>
+                  <th>ت</th>
+                  <th>المنصب الوظيفي الشاغر</th>
+                  <th>القسم</th>
+                  <th>الهيئة</th>
+                  <th>التشكيل القيادي</th>
+                  <th>مستوى المسؤولية</th>
+                  <th>الملاءمة لهندسة النفط</th>
+                </tr>
+              </thead>
+              <tbody id="vacancies-tbody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ============================================================= -->
+      <!-- TAB 4: RETIREMENT & SUCCESSION -->
+      <!-- ============================================================= -->
+      <section id="tab-succession" class="tab-section">
+        
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-user-clock" style="color: #ea580c;"></i> خطة التعويض والإحلال لمسؤولي الوحدات على وشك التقاعد (&le; سنتين)</h3>
+            <span class="countdown-tag"><i class="fa-solid fa-triangle-exclamation"></i> تم التمييز باللون البرتقالي/الأحمر</span>
+          </div>
+
+          <div class="filter-bar">
+            <div class="search-input-wrap">
+              <i class="fa-solid fa-search"></i>
+              <input type="text" id="ret-search" placeholder="بحث باسم المسؤول، المنصب، أو القسم..." oninput="filterRetirement()">
+            </div>
+            <select class="filter-select" id="ret-years-filter" onchange="filterRetirement()">
+              <option value="">جميع الفئات</option>
+              <option value="0">تقاعد فوري / هذا العام (2026)</option>
+              <option value="1">متبقي سنة واحدة (2027)</option>
+              <option value="2">متبقي سنتان (2028)</option>
+            </select>
+          </div>
+
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>رقم التسجيل</th>
+                  <th>اسم الموظف المسؤول</th>
+                  <th>المسمى الوظيفي والدرجة</th>
+                  <th>التولد</th>
+                  <th>المتبقي للتقاعد</th>
+                  <th>المنصب والوحدة</th>
+                  <th>القسم والهيئة</th>
+                  <th>التشكيل</th>
+                  <th>التخصص المسجل</th>
+                </tr>
+              </thead>
+              <tbody id="retirement-tbody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ============================================================= -->
+      <!-- TAB 5: ALL MASOOLIAT DIRECTORY -->
+      <!-- ============================================================= -->
+      <section id="tab-all-masooliat" class="tab-section">
+        
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-sitemap"></i> قاعدة بيانات المسؤوليات الشاملة 2026</h3>
+            <span id="all-count-display" style="font-size: 13px; font-weight: 700; color: var(--accent);">1,447 سجلاً</span>
+          </div>
+
+          <div class="filter-bar">
+            <div class="search-input-wrap">
+              <i class="fa-solid fa-search"></i>
+              <input type="text" id="all-search" placeholder="بحث بالاسم، رقم التسجيل، المنصب، القسم، التخصص..." oninput="filterAllMasooliat()">
+            </div>
+            <select class="filter-select" id="all-status-filter" onchange="filterAllMasooliat()">
+              <option value="">جميع الحالات</option>
+              <option value="vacant">المناصب الشاغرة فقط</option>
+              <option value="retiring">على وشك التقاعد (&le; 2 سنة)</option>
+              <option value="occupied">المشغولة حالياً</option>
+            </select>
+            <select class="filter-select" id="all-level-filter" onchange="filterAllMasooliat()">
+              <option value="">جميع المستويات</option>
+              <option value="وحدة">وحدة</option>
+              <option value="شعبة">شعبة</option>
+              <option value="قسم">قسم</option>
+              <option value="مستودع">مستودع</option>
+            </select>
+          </div>
+
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>رقم التسجيل</th>
+                  <th>اسم الموظف</th>
+                  <th>العنوان والدرجة</th>
+                  <th>التحصيل والتخصص</th>
+                  <th>المنصب الوظيفي</th>
+                  <th>القسم</th>
+                  <th>الهيئة</th>
+                  <th>المسؤولية</th>
+                  <th>سنة التولد والتقاعد</th>
+                  <th>الملاحظات والتثبيت</th>
+                </tr>
+              </thead>
+              <tbody id="all-masooliat-tbody">
+                <!-- Dynamically loaded -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ============================================================= -->
+      <!-- TAB 6: WOKALA & FORBIDDEN LIST -->
+      <!-- ============================================================= -->
+      <section id="tab-wokala" class="tab-section">
+        
+        <!-- Forbidden List -->
+        <div class="card" style="border-right: 5px solid #dc2626;">
+          <div class="card-header">
+            <h3 style="color: #b91c1c;"><i class="fa-solid fa-ban" style="color: #dc2626;"></i> قائمة الموظفين الممنوعين من تولي المهام الإدارية (توجيهات 2026)</h3>
+            <span class="status-badge vacant">7 حالات موثقة</span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr style="background: #fee2e2;">
+                  <th>اسم الموظف</th>
+                  <th>مقر العمل</th>
+                  <th>سبب المنع من تولي مهام</th>
+                  <th>رقم وتاريخ الكتاب</th>
+                  <th>الإجراء المتخذ</th>
+                </tr>
+              </thead>
+              <tbody id="forbidden-tbody">
+                <!-- Dynamically loaded -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Wokala Directory -->
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-users-gear"></i> دليل جدول الوكلاء والتكليفات 2026</h3>
+            <span id="wokala-count-display" style="font-size: 13px; font-weight: 700; color: var(--accent);">386 سجلاً</span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>رقم التسجيل</th>
+                  <th>اسم الوكيل</th>
+                  <th>العنوان الوظيفي</th>
+                  <th>نوع الوكالة</th>
+                  <th>المسؤولية</th>
+                  <th>التشكيل</th>
+                  <th>الهيئة</th>
+                  <th>القسم</th>
+                  <th>تاريخ الإناطة</th>
+                  <th>الملاحظات</th>
+                </tr>
+              </thead>
+              <tbody id="wokala-tbody">
+                <!-- Dynamically loaded -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="modal-overlay" id="detail-modal" onclick="closeModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 id="modal-title">تفاصيل السجل</h3>
+        <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" id="modal-content">
+        <!-- Content inserted dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State
+    const data = window.APP_DATA || {};
+    const candidate = data.candidate || {};
+    const responsibilities = data.responsibilities || [];
+    const unitVacancies = data.scored_vacancies || [];
+    const successionList = data.scored_succession || [];
+    const wokalaList = data.wokala || [];
+    const forbiddenList = data.forbidden || [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderHodaSection();
+      renderVacanciesTable(unitVacancies);
+      renderRetirementTable(successionList);
+      renderAllMasooliatTable(responsibilities);
+      renderWokalaAndForbidden();
+      initCharts();
+    });
+
+    // Tab Navigation
+    function switchTab(tabId) {
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-section').forEach(el => el.classList.remove('active'));
+      
+      const targetNav = Array.from(document.querySelectorAll('.nav-item')).find(el => el.getAttribute('onclick')?.includes(tabId));
+      if (targetNav) targetNav.classList.add('active');
+
+      const targetTab = document.getElementById(`tab-${tabId}`);
+      if (targetTab) targetTab.classList.add('active');
+
+      // Update titles
+      const titles = {
+        'hoda-profile': ['ملف المهندسة هدى حامد مصطاف مطلك', 'دراسة الترشيح لمسؤولية وحدة ومطابقة التخصص وخطة الإحلال والتعويض'],
+        'dashboard': ['لوحة المؤشرات والتحليلات العامة', 'إحصائيات الشواغر، الإحلال الوظيفي، وتوزيع المسؤوليات'],
+        'vacancies': ['دليل شواغر مسؤولي الوحدات', 'حصر كافة الوحدات الشاغرة المؤهلة للترشيح المباشر'],
+        'succession': ['خطة التعويض والإحلال للتقاعد', 'حصر القيادات ومسؤولي الوحدات المتبقي لهم أقل من سنتين للتقاعد'],
+        'all-masooliat': ['دليل المسؤوليات الشامل 2026', 'محرك البحث والمطابقة في كافة التشكيلات والهيئات'],
+        'wokala': ['جدول الوكلاء وقائمة الممنوعين', 'استعراض التكليفات بالوكالة والموانع الإدارية الموثقة']
+      };
+
+      if (titles[tabId]) {
+        document.getElementById('page-title').innerText = titles[tabId][0];
+        document.getElementById('page-subtitle').innerText = titles[tabId][1];
+      }
+
+      // Close mobile sidebar if open
+      document.getElementById('sidebar').classList.remove('open');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    // Render Hoda Candidate Recommendations
+    function renderHodaSection() {
+      const vacGrid = document.getElementById('hoda-vacancies-grid');
+      const succGrid = document.getElementById('hoda-succession-grid');
+
+      // Top matching vacancies
+      const topVacancies = unitVacancies.slice(0, 6);
+      vacGrid.innerHTML = topVacancies.map(v => `
+        <div class="rec-card high-match">
+          <div class="rec-header">
+            <div class="rec-title">${v.position}</div>
+            <span class="score-badge"><i class="fa-solid fa-star"></i> تطابق تخصصي</span>
+          </div>
+          <div class="rec-body">
+            <div class="rec-field"><i class="fa-solid fa-building" style="color:#0284c7; width:16px;"></i> <span><strong>القسم:</strong> ${v.dept || 'مقر الهيئة'}</span></div>
+            <div class="rec-field"><i class="fa-solid fa-layer-group" style="color:#0284c7; width:16px;"></i> <span><strong>الهيئة:</strong> ${v.body || '-'}</span></div>
+            <div class="rec-field"><i class="fa-solid fa-network-wired" style="color:#0284c7; width:16px;"></i> <span><strong>التشكيل:</strong> ${v.formation || '-'}</span></div>
+            <div class="rec-tags">
+              ${(v.match_tags || []).map(t => `<span class="tag-chip petro">${t}</span>`).join('')}
+              <span class="tag-chip central">المستوى: مسؤولة وحدة</span>
+            </div>
+          </div>
+          <div style="margin-top:auto; padding-top:10px; border-top:1px dashed var(--border); font-size:11px; color:#16a34a; font-weight:700;">
+            <i class="fa-solid fa-check"></i> المنصب شاغر حالياً وجاهز للترشيح المباشر
+          </div>
+        </div>
+      `).join('');
+
+      // Top succession opportunities (< 2 years)
+      const topSuccession = successionList.slice(0, 6);
+      succGrid.innerHTML = topSuccession.map(s => `
+        <div class="rec-card retire-alert">
+          <div class="rec-header">
+            <div class="rec-title">${s.position}</div>
+            <span class="countdown-tag">${s.years_to_retirement <= 0 ? 'تقاعد هذا العام 2026' : `متبقي ${s.years_to_retirement} سنة`}</span>
+          </div>
+          <div class="rec-body">
+            <div class="rec-field"><i class="fa-solid fa-building" style="color:#ea580c; width:16px;"></i> <span><strong>القسم:</strong> ${s.dept || '-'}</span></div>
+            <div class="rec-field"><i class="fa-solid fa-layer-group" style="color:#ea580c; width:16px;"></i> <span><strong>الهيئة:</strong> ${s.body || '-'}</span></div>
+            <div class="rec-field"><i class="fa-solid fa-network-wired" style="color:#ea580c; width:16px;"></i> <span><strong>التشكيل:</strong> ${s.formation || '-'}</span></div>
+            <div class="retire-box">
+              <div>المسؤول الحالي: <span class="holder-name">${s.name}</span></div>
+              <div class="years-left">تولد: ${s.birth_year} (سنة التقاعد القانونية: ${s.retirement_year})</div>
+            </div>
+          </div>
+          <div style="margin-top:auto; padding-top:10px; border-top:1px dashed var(--border); font-size:11px; color:#c2410c; font-weight:700;">
+            <i class="fa-solid fa-arrow-right-arrow-left"></i> خطة الإحلال: النقل للوحدة والتأهيل لاستلام المسؤولية
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Render Vacancies Table
+    function renderVacanciesTable(items) {
+      const tbody = document.getElementById('vacancies-tbody');
+      tbody.innerHTML = items.map((v, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td style="font-weight: 800; color: var(--primary);">${v.position}</td>
+          <td>${v.dept || '-'}</td>
+          <td>${v.body || '-'}</td>
+          <td>${v.formation || '-'}</td>
+          <td><span class="status-badge vacant">شاغر (${v.level || 'وحدة'})</span></td>
+          <td>${(v.match_tags || []).includes('مطابقة تخصصية') || (v.match_tags || []).some(t => t.includes('نفط')) ? '<span class="status-badge active"><i class="fa-solid fa-check"></i> ملائم جداً</span>' : '<span class="status-badge" style="background:#f1f5f9; color:#475569;">إداري / فني عام</span>'}</td>
+        </tr>
+      `).join('');
+    }
+
+    function filterVacancies() {
+      const q = document.getElementById('vac-search').value.toLowerCase().trim();
+      const form = document.getElementById('vac-formation-filter').value;
+      const filtered = unitVacancies.filter(v => {
+        const matchQ = !q || (v.position + v.dept + v.body + v.formation).toLowerCase().includes(q);
+        const matchForm = !form || (v.formation || '').includes(form);
+        return matchQ && matchForm;
+      });
+      renderVacanciesTable(filtered);
+    }
+
+    // Render Retirement Table
+    function renderRetirementTable(items) {
+      const tbody = document.getElementById('retirement-tbody');
+      tbody.innerHTML = items.map(s => `
+        <tr class="near-ret-row">
+          <td style="font-weight: 700;">${s.reg_no || '-'}</td>
+          <td style="font-weight: 800; color: #9a3412;">${s.name}</td>
+          <td>${s.job_title || '-'} <span style="font-size:11px; color:#64748b;">(${s.grade || '-'})</span></td>
+          <td>${s.birth_year || '-'}</td>
+          <td>
+            <span class="countdown-tag">${s.years_to_retirement <= 0 ? '2026 (هذا العام)' : `متبقي ${s.years_to_retirement} سنة (${s.retirement_year})`}</span>
+          </td>
+          <td style="font-weight: 700;">${s.position}</td>
+          <td>${s.dept || '-'} / ${s.body || '-'}</td>
+          <td>${s.formation || '-'}</td>
+          <td>${s.qualification || s.exact_spec || '-'}</td>
+        </tr>
+      `).join('');
+    }
+
+    function filterRetirement() {
+      const q = document.getElementById('ret-search').value.toLowerCase().trim();
+      const yrs = document.getElementById('ret-years-filter').value;
+      const filtered = successionList.filter(s => {
+        const matchQ = !q || (s.name + s.position + s.dept + s.body + s.reg_no).toLowerCase().includes(q);
+        let matchYrs = true;
+        if (yrs !== '') {
+          matchYrs = s.years_to_retirement === parseInt(yrs) || (parseInt(yrs) === 0 && s.years_to_retirement <= 0);
+        }
+        return matchQ && matchYrs;
+      });
+      renderRetirementTable(filtered);
+    }
+
+    // Render All Masooliat
+    function renderAllMasooliatTable(items) {
+      const tbody = document.getElementById('all-masooliat-tbody');
+      const displayItems = items.slice(0, 150); // initial 150 for high performance
+      document.getElementById('all-count-display').innerText = `${items.length} سجلاً (معروض ${displayItems.length})`;
+
+      tbody.innerHTML = displayItems.map(r => {
+        let rowClass = r.is_near_retirement ? 'near-ret-row' : '';
+        return `
+          <tr class="${rowClass}">
+            <td style="font-weight: 700;">${r.reg_no || '-'}</td>
+            <td style="font-weight: 800; color: ${r.is_vacant ? '#dc2626' : 'var(--primary)'};">
+              ${r.is_vacant ? '<span class="status-badge vacant">منصب شاغر</span>' : r.name}
+            </td>
+            <td>${r.job_title || '-'} ${r.grade ? `<span style="font-size:11px; color:#64748b;">(${r.grade})</span>` : ''}</td>
+            <td>${r.qualification || '-'}</td>
+            <td style="font-weight: 700;">${r.position}</td>
+            <td>${r.dept || '-'}</td>
+            <td>${r.body || '-'}</td>
+            <td><span class="status-badge" style="background:#f1f5f9; color:#334155;">${r.level || '-'}</span></td>
+            <td>
+              ${r.birth_year ? `${r.birth_year} ` : '-'}
+              ${r.is_near_retirement ? `<span class="countdown-tag" style="font-size:9px;">تقاعد ${r.retirement_year}</span>` : ''}
+            </td>
+            <td style="font-size:11.5px; color:#64748b;">${r.notes || r.other || '-'}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterAllMasooliat() {
+      const q = document.getElementById('all-search').value.toLowerCase().trim();
+      const status = document.getElementById('all-status-filter').value;
+      const level = document.getElementById('all-level-filter').value;
+
+      const filtered = responsibilities.filter(r => {
+        const text = (r.name + r.reg_no + r.position + r.dept + r.body + r.qualification + (r.notes||'')).toLowerCase();
+        const matchQ = !q || text.includes(q);
+        
+        let matchStatus = true;
+        if (status === 'vacant') matchStatus = r.is_vacant;
+        else if (status === 'retiring') matchStatus = r.is_near_retirement;
+        else if (status === 'occupied') matchStatus = !r.is_vacant;
+
+        const matchLevel = !level || (r.level || '').includes(level);
+
+        return matchQ && matchStatus && matchLevel;
+      });
+
+      renderAllMasooliatTable(filtered);
+    }
+
+    // Render Wokala and Forbidden
+    function renderWokalaAndForbidden() {
+      const fbBody = document.getElementById('forbidden-tbody');
+      fbBody.innerHTML = forbiddenList.map(f => `
+        <tr>
+          <td style="font-weight: 800; color: #b91c1c;">${f.name}</td>
+          <td>${f.workplace}</td>
+          <td style="color: #dc2626; font-weight: 700;">${f.reason}</td>
+          <td>${f.letter_no}</td>
+          <td style="font-size: 11.5px; color: #475569;">${f.action_taken}</td>
+        </tr>
+      `).join('');
+
+      const wBody = document.getElementById('wokala-tbody');
+      wBody.innerHTML = wokalaList.slice(0, 100).map(w => `
+        <tr>
+          <td style="font-weight: 700;">${w.reg_no || '-'}</td>
+          <td style="font-weight: 800; color: ${w.is_vacant ? '#dc2626' : 'var(--primary)'};">
+            ${w.is_vacant ? '<span class="status-badge vacant">وكالة شاغرة</span>' : w.name}
+          </td>
+          <td>${w.job_title || '-'}</td>
+          <td><span class="status-badge active">${w.agency_type || '-'}</span></td>
+          <td style="font-weight: 700;">${w.position}</td>
+          <td>${w.formation || '-'}</td>
+          <td>${w.body || '-'}</td>
+          <td>${w.dept || '-'}</td>
+          <td>${w.assigned_date || '-'}</td>
+          <td style="font-size:11.5px; color:#64748b;">${w.notes || '-'}</td>
+        </tr>
+      `).join('');
+    }
+
+    // Charts Initialization
+    function initCharts() {
+      const ctxForm = document.getElementById('formationsChart')?.getContext('2d');
+      if (ctxForm) {
+        new Chart(ctxForm, {
+          type: 'bar',
+          data: {
+            labels: ['معاون شؤون العمليات', 'المدير العام', 'معاون عمليات الجنوب', 'معاون الشؤون الفنية'],
+            datasets: [{
+              label: 'عدد المسؤوليات',
+              data: [670, 360, 240, 177],
+              backgroundColor: ['#0284c7', '#0f2b48', '#d97706', '#16a34a'],
+              borderRadius: 8
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } }
+          }
+        });
+      }
+
+      const ctxLev = document.getElementById('levelsChart')?.getContext('2d');
+      if (ctxLev) {
+        new Chart(ctxLev, {
+          type: 'doughnut',
+          data: {
+            labels: ['وحدة', 'شعبة', 'قسم', 'مستودع / أخرى'],
+            datasets: [{
+              data: [1090, 265, 38, 54],
+              backgroundColor: ['#0284c7', '#38bdf8', '#0f2b48', '#d97706']
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' } }
+          }
+        });
+      }
+    }
+
+    // CSV Exporter
+    function exportTableToCSV(tableId, filename) {
+      const table = document.getElementById(tableId);
+      let csv = [];
+      for (let i = 0; i < table.rows.length; i++) {
+        let row = [], cols = table.rows[i].cells;
+        for (let j = 0; j < cols.length; j++) {
+          let text = cols[j].innerText.replace(/"/g, '""');
+          row.push('"' + text + '"');
+        }
+        csv.push(row.join(","));
+      }
+      const csvFile = new Blob(["\ufeff" + csv.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const downloadLink = document.createElement("a");
+      downloadLink.download = filename;
+      downloadLink.href = window.URL.createObjectURL(csvFile);
+      downloadLink.style.display = "none";
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    }
+
+    function exportCandidateReport() {
+      alert("تم تجهيز التقرير التنفيذي للطباعة والتصدير. يمكنك استخدام زر (طباعة التقرير) لحفظه كملف PDF عالي الجودة.");
+      window.print();
+    }
+  </script>
+</body>
+</html>
