@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>نظام تحليل المسؤوليات والإحلال الوظيفي 2026 | تقرير الترشيح الاستراتيجي</title>
+  <title>نظام تحليل المسؤوليات والإحلال الوظيفي 2026 | ترشيحات مقر الشركة</title>
   
   <!-- Google Fonts: Cairo & Tajawal -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,8 +21,8 @@
 
   <style>
     :root {
-      --primary: #0b2545;
-      --primary-light: #134074;
+      --primary: #07172c;
+      --primary-light: #0f2b48;
       --accent: #0284c7;
       --accent-light: #e0f2fe;
       --gold: #d97706;
@@ -33,8 +33,6 @@
       --success-light: #dcfce7;
       --warning: #ea580c;
       --warning-light: #ffedd5;
-      --purple: #7c3aed;
-      --purple-light: #ede9fe;
       --bg: #f8fafc;
       --card-bg: #ffffff;
       --border: #e2e8f0;
@@ -43,20 +41,8 @@
       --sidebar-w: 280px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Cairo', 'Tajawal', sans-serif;
-    }
-
-    body {
-      background-color: var(--bg);
-      color: var(--text);
-      display: flex;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', 'Tajawal', sans-serif; }
+    body { background-color: var(--bg); color: var(--text); display: flex; min-height: 100vh; overflow-x: hidden; }
 
     /* Sidebar */
     .sidebar {
@@ -66,9 +52,7 @@
       display: flex;
       flex-direction: column;
       position: fixed;
-      top: 0;
-      bottom: 0;
-      right: 0;
+      top: 0; bottom: 0; right: 0;
       z-index: 100;
       box-shadow: -4px 0 20px rgba(0,0,0,0.15);
       transition: transform 0.3s ease;
@@ -83,722 +67,245 @@
     }
 
     .sidebar-header .logo-icon {
-      width: 44px;
-      height: 44px;
+      width: 44px; height: 44px;
       background: linear-gradient(135deg, #0284c7, #38bdf8);
       border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; color: white;
       box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
     }
 
-    .sidebar-header h2 {
-      font-size: 16px;
-      font-weight: 800;
-      line-height: 1.3;
-    }
-
-    .sidebar-header span {
-      font-size: 11px;
-      color: #94a3b8;
-      display: block;
-      font-weight: 400;
-    }
+    .sidebar-header h2 { font-size: 16px; font-weight: 800; line-height: 1.3; }
+    .sidebar-header span { font-size: 11px; color: #94a3b8; display: block; }
 
     .nav-list {
       list-style: none;
       padding: 16px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      flex: 1;
-      overflow-y: auto;
+      display: flex; flex-direction: column; gap: 6px;
+      flex: 1; overflow-y: auto;
     }
 
     .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
-      border-radius: 10px;
-      color: #cbd5e1;
-      text-decoration: none;
-      font-size: 13.5px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px; border-radius: 10px;
+      color: #cbd5e1; font-size: 13.5px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s ease;
     }
 
-    .nav-item:hover {
-      background: rgba(255,255,255,0.08);
-      color: #fff;
-      transform: translateX(-4px);
-    }
-
+    .nav-item:hover { background: rgba(255,255,255,0.08); color: #fff; transform: translateX(-4px); }
     .nav-item.active {
       background: linear-gradient(90deg, #0284c7, #0369a1);
-      color: #fff;
-      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+      color: #fff; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
     }
-
-    .nav-item i {
-      font-size: 18px;
-      width: 22px;
-      text-align: center;
-    }
-
-    .nav-badge {
-      margin-right: auto;
-      background: rgba(255,255,255,0.15);
-      font-size: 11px;
-      padding: 2px 8px;
-      border-radius: 20px;
-      font-weight: 700;
-    }
-
-    .nav-badge.danger {
-      background: #ef4444;
-      color: #fff;
-    }
-
-    .nav-badge.special {
-      background: #f59e0b;
-      color: #0f172a;
-    }
+    .nav-item i { font-size: 18px; width: 22px; text-align: center; }
+    .nav-badge { margin-right: auto; background: rgba(255,255,255,0.15); font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 700; }
+    .nav-badge.danger { background: #ef4444; color: #fff; }
+    .nav-badge.special { background: #f59e0b; color: #0f172a; }
 
     .sidebar-footer {
-      padding: 16px;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      font-size: 11.5px;
-      color: #94a3b8;
-      text-align: center;
+      padding: 16px; border-top: 1px solid rgba(255,255,255,0.1);
+      font-size: 11.5px; color: #94a3b8; text-align: center;
     }
 
     /* Main Content */
-    .main-wrapper {
-      margin-right: var(--sidebar-w);
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
-
-    /* Top Bar */
+    .main-wrapper { margin-right: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-width: 0; }
     .topbar {
-      background: var(--card-bg);
-      border-bottom: 1px solid var(--border);
-      padding: 16px 28px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 50;
+      background: var(--card-bg); border-bottom: 1px solid var(--border);
+      padding: 16px 28px; display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 50;
     }
-
-    .topbar-title h1 {
-      font-size: 19px;
-      font-weight: 800;
-      color: var(--primary);
-    }
-
-    .topbar-title p {
-      font-size: 12.5px;
-      color: var(--text-muted);
-    }
-
-    .topbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .topbar-title h1 { font-size: 19px; font-weight: 800; color: var(--primary); }
+    .topbar-title p { font-size: 12.5px; color: var(--text-muted); }
+    .topbar-actions { display: flex; align-items: center; gap: 10px; }
 
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 9px 16px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s ease;
-      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 700;
+      cursor: pointer; border: none; transition: all 0.2s ease; text-decoration: none;
     }
-
     .btn-primary { background: var(--primary); color: white; }
-    .btn-primary:hover { background: var(--primary-light); }
-    .btn-accent { background: var(--accent); color: white; }
-    .btn-accent:hover { background: #0369a1; }
     .btn-outline { background: white; border: 1px solid var(--border); color: var(--text); }
     .btn-outline:hover { background: var(--bg); }
 
-    /* Content Area */
-    .content-area {
-      padding: 28px;
-      flex: 1;
-    }
+    .content-area { padding: 28px; flex: 1; }
+    .tab-section { display: none; }
+    .tab-section.active { display: block; animation: fadeIn 0.25s ease; }
 
-    .tab-section {
-      display: none;
-    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-    .tab-section.active {
-      display: block;
-      animation: fadeIn 0.25s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Cards */
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 24px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-    }
-
-    .card-header {
+    /* Alert Box */
+    .hq-exclusive-alert {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-right: 5px solid #10b981;
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 20px;
-      padding-bottom: 14px;
-      border-bottom: 1px solid var(--border);
     }
+    .hq-exclusive-alert .alert-text { font-size: 13px; color: #065f46; font-weight: 700; }
+    .hq-badge { background: #047857; color: white; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; }
 
-    .card-header h3 {
-      font-size: 17px;
-      font-weight: 800;
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .card-header h3 i {
-      color: var(--accent);
-    }
-
-    /* Stats Grid */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .stat-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 18px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
+    /* Cards */
+    .card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px; margin-bottom: 24px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-      transition: transform 0.2s;
     }
-
-    .stat-card:hover { transform: translateY(-3px); }
-
-    .stat-icon {
-      width: 50px;
-      height: 50px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
+    .card-header {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 12px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border);
     }
-
-    .stat-info h3 {
-      font-size: 22px;
-      font-weight: 900;
-      color: var(--primary);
-      line-height: 1.1;
-    }
-
-    .stat-info p {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 4px;
-      font-weight: 600;
-    }
+    .card-header h3 { font-size: 17px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+    .card-header h3 i { color: var(--accent); }
 
     /* Candidate Hero */
     .candidate-hero {
       background: linear-gradient(135deg, #07172c 0%, #0b2545 40%, #134074 100%);
-      border-radius: 20px;
-      padding: 30px;
-      color: white;
-      margin-bottom: 24px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 10px 30px rgba(7, 23, 44, 0.3);
+      border-radius: 20px; padding: 30px; color: white; margin-bottom: 20px;
+      position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(7, 23, 44, 0.3);
     }
-
-    .candidate-top {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .candidate-main-info {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
+    .candidate-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; }
+    .candidate-main-info { display: flex; align-items: center; gap: 20px; }
     .candidate-avatar {
-      width: 80px;
-      height: 80px;
+      width: 80px; height: 80px;
       background: linear-gradient(135deg, #38bdf8, #0284c7);
-      border: 4px solid rgba(255,255,255,0.2);
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 36px;
-      color: white;
+      border: 4px solid rgba(255,255,255,0.2); border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px; color: white;
     }
-
-    .candidate-titles h2 {
-      font-size: 23px;
-      font-weight: 900;
-    }
-
-    .candidate-titles .badge-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
+    .candidate-titles h2 { font-size: 23px; font-weight: 900; }
+    .candidate-titles .badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
     .candidate-badge {
-      background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(8px);
-      padding: 4px 12px;
-      border-radius: 30px;
-      font-size: 12px;
-      font-weight: 700;
+      background: rgba(255,255,255,0.15); backdrop-filter: blur(8px);
+      padding: 4px 12px; border-radius: 30px; font-size: 12px; font-weight: 700;
       border: 1px solid rgba(255,255,255,0.2);
     }
-
-    .candidate-badge.gold {
-      background: #f59e0b;
-      color: #0f172a;
-      border-color: #fbbf24;
-    }
-
-    .candidate-badge.cyan {
-      background: #0284c7;
-      color: white;
-      border-color: #38bdf8;
-    }
+    .candidate-badge.gold { background: #f59e0b; color: #0f172a; border-color: #fbbf24; }
+    .candidate-badge.cyan { background: #0284c7; color: white; border-color: #38bdf8; }
 
     .candidate-details-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 12px;
-      margin-top: 20px;
-      padding-top: 18px;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 12px; margin-top: 20px; padding-top: 18px;
       border-top: 1px solid rgba(255,255,255,0.15);
-      position: relative;
-      z-index: 2;
     }
-
     .cand-item {
-      background: rgba(255,255,255,0.08);
-      padding: 10px 14px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.08); padding: 10px 14px;
+      border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);
     }
+    .cand-item label { font-size: 11px; color: #94a3b8; display: block; margin-bottom: 2px; }
+    .cand-item span { font-size: 13px; font-weight: 700; color: #fff; }
 
-    .cand-item label {
-      font-size: 11px;
-      color: #94a3b8;
-      display: block;
-      margin-bottom: 2px;
-    }
-
-    .cand-item span {
-      font-size: 13px;
-      font-weight: 700;
-      color: #fff;
-    }
-
-    /* Sub-tabs / Segments */
+    /* Sub-tabs */
     .sub-tabs-wrap {
-      display: flex;
-      gap: 8px;
-      background: #f1f5f9;
-      padding: 6px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-      overflow-x: auto;
+      display: flex; gap: 8px; background: #f1f5f9;
+      padding: 6px; border-radius: 12px; margin-bottom: 20px; overflow-x: auto;
     }
-
     .sub-tab-btn {
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 700;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 700;
+      border: none; background: transparent; color: var(--text-muted);
+      cursor: pointer; transition: all 0.2s; white-space: nowrap;
+      display: flex; align-items: center; gap: 8px;
     }
-
     .sub-tab-btn.active {
-      background: white;
-      color: var(--primary);
+      background: white; color: var(--primary);
       box-shadow: 0 2px 6px rgba(0,0,0,0.06);
     }
-
     .sub-tab-btn .badge-pill {
-      background: #e2e8f0;
-      color: #475569;
-      padding: 2px 7px;
-      border-radius: 10px;
-      font-size: 11px;
+      background: #e2e8f0; color: #475569; padding: 2px 7px;
+      border-radius: 10px; font-size: 11px;
     }
+    .sub-tab-btn.active .badge-pill { background: var(--accent-light); color: var(--accent); }
 
-    .sub-tab-btn.active .badge-pill {
-      background: var(--accent-light);
-      color: var(--accent);
-    }
-
-    /* Recommendation Cards Grid */
-    .rec-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
-      gap: 16px;
-    }
-
+    /* Recommendation Cards */
+    .rec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 16px; }
     .rec-card {
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 18px;
-      background: #ffffff;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: all 0.25s ease;
-      position: relative;
+      border: 1px solid var(--border); border-radius: 14px; padding: 18px;
+      background: #ffffff; display: flex; flex-direction: column; justify-content: space-between;
+      transition: all 0.25s ease; position: relative;
     }
-
-    .rec-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(2, 132, 199, 0.08);
-    }
-
-    .rec-card.high-match { border-right: 5px solid #16a34a; }
-    .rec-card.petro-match { border-right: 5px solid #0284c7; }
+    .rec-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(2, 132, 199, 0.08); }
+    .rec-card.high-match { border-right: 5px solid #10b981; }
     .rec-card.retire-alert { border-right: 5px solid #ea580c; background: #fffdfa; }
 
-    .rec-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 10px;
-      gap: 8px;
-    }
-
-    .rec-title {
-      font-size: 14.5px;
-      font-weight: 800;
-      color: var(--primary);
-      line-height: 1.35;
-    }
-
-    .score-badge {
-      font-size: 11px;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 6px;
-      white-space: nowrap;
-    }
-
+    .rec-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; gap: 8px; }
+    .rec-title { font-size: 14.5px; font-weight: 800; color: var(--primary); line-height: 1.35; }
+    .score-badge { font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
     .score-badge.green { background: #dcfce7; color: #15803d; }
     .score-badge.blue { background: #e0f2fe; color: #0369a1; }
     .score-badge.orange { background: #ffedd5; color: #c2410c; }
-    .score-badge.purple { background: #ede9fe; color: #6d28d9; }
 
-    .rec-body {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-    }
-
-    .rec-field {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
+    .rec-body { display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+    .rec-field { display: flex; align-items: center; gap: 6px; }
     .rec-field strong { color: var(--text); }
-
-    .rec-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      margin-top: 6px;
-    }
-
-    .tag-chip {
-      font-size: 10.5px;
-      padding: 2px 7px;
-      border-radius: 4px;
-      background: #f1f5f9;
-      color: #475569;
-      font-weight: 600;
-    }
-
+    .rec-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+    .tag-chip { font-size: 10.5px; padding: 2px 7px; border-radius: 4px; background: #f1f5f9; color: #475569; font-weight: 600; }
+    .tag-chip.hq { background: #d1fae5; color: #065f46; font-weight: 700; }
     .tag-chip.petro { background: #dbeafe; color: #1e40af; }
-    .tag-chip.central { background: #fef3c7; color: #92400e; }
-    .tag-chip.dept { background: #f3e8ff; color: #6b21a8; }
 
     .retire-box {
-      background: var(--warning-light);
-      border: 1px solid #fed7aa;
-      border-radius: 8px;
-      padding: 10px 12px;
-      margin-top: 8px;
-      font-size: 11.5px;
+      background: var(--warning-light); border: 1px solid #fed7aa;
+      border-radius: 8px; padding: 10px 12px; margin-top: 8px; font-size: 11.5px;
     }
-
     .retire-box .holder-name { font-weight: 800; color: #9a3412; }
     .retire-box .years-left { color: #c2410c; font-weight: 700; }
 
     /* Department Ranking Cards */
     .dept-rank-card {
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 20px;
-      margin-bottom: 16px;
-      display: flex;
-      gap: 20px;
-      align-items: flex-start;
+      background: #ffffff; border: 1px solid var(--border); border-radius: 14px;
+      padding: 20px; margin-bottom: 16px; display: flex; gap: 20px; align-items: flex-start;
       transition: all 0.25s;
     }
-
-    .dept-rank-card:hover {
-      border-color: var(--accent);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.04);
-    }
-
+    .dept-rank-card:hover { border-color: var(--accent); box-shadow: 0 6px 16px rgba(0,0,0,0.04); }
     .rank-number {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
+      width: 48px; height: 48px; border-radius: 12px;
       background: linear-gradient(135deg, #0b2545, #134074);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      font-weight: 900;
-      flex-shrink: 0;
-      box-shadow: 0 4px 10px rgba(11, 37, 69, 0.2);
+      color: white; display: flex; align-items: center; justify-content: center;
+      font-size: 20px; font-weight: 900; flex-shrink: 0;
     }
-
     .dept-rank-card:nth-child(1) .rank-number { background: linear-gradient(135deg, #0284c7, #38bdf8); }
     .dept-rank-card:nth-child(2) .rank-number { background: linear-gradient(135deg, #d97706, #fbbf24); color: #0f172a; }
     .dept-rank-card:nth-child(3) .rank-number { background: linear-gradient(135deg, #16a34a, #4ade80); }
 
     .dept-rank-content { flex: 1; }
+    .dept-header-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+    .dept-name { font-size: 16px; font-weight: 800; color: var(--primary); }
+    .dept-priority-badge { font-size: 11.5px; font-weight: 800; padding: 3px 10px; border-radius: 20px; background: #e0f2fe; color: #0369a1; }
+    .dept-desc { font-size: 13px; color: #334155; line-height: 1.6; margin-bottom: 10px; }
+    .dept-units-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #475569; }
 
-    .dept-header-row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-
-    .dept-name {
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--primary);
-    }
-
-    .dept-priority-badge {
-      font-size: 11.5px;
-      font-weight: 800;
-      padding: 3px 10px;
-      border-radius: 20px;
-      background: #e0f2fe;
-      color: #0369a1;
-    }
-
-    .dept-desc {
-      font-size: 13px;
-      color: #334155;
-      line-height: 1.6;
-      margin-bottom: 10px;
-    }
-
-    .dept-units-box {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 12px;
-      color: #475569;
-    }
-
-    /* Filter Bar */
-    .filter-bar {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px 16px;
-      margin-bottom: 16px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .search-input-wrap {
-      flex: 1;
-      min-width: 220px;
-      position: relative;
-    }
-
-    .search-input-wrap i {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-    }
-
-    .search-input-wrap input {
-      width: 100%;
-      padding: 9px 38px 9px 14px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 13px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .search-input-wrap input:focus { border-color: var(--accent); }
-
-    .filter-select {
-      padding: 9px 12px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 12.5px;
-      background: white;
-      outline: none;
-      cursor: pointer;
-    }
-
-    /* Data Tables */
-    .table-responsive {
-      overflow-x: auto;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-    }
-
-    .custom-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12.5px;
-      text-align: right;
-    }
-
-    .custom-table th {
-      background: #f1f5f9;
-      color: var(--primary);
-      font-weight: 800;
-      padding: 11px 14px;
-      border-bottom: 2px solid var(--border);
-      white-space: nowrap;
-    }
-
-    .custom-table td {
-      padding: 10px 14px;
-      border-bottom: 1px solid var(--border);
-      color: var(--text);
-    }
-
+    /* Tables */
+    .table-responsive { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); }
+    .custom-table { width: 100%; border-collapse: collapse; font-size: 12.5px; text-align: right; }
+    .custom-table th { background: #f1f5f9; color: var(--primary); font-weight: 800; padding: 11px 14px; border-bottom: 2px solid var(--border); white-space: nowrap; }
+    .custom-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
     .custom-table tr:hover { background: #f8fafc; }
     .custom-table tr.near-ret-row { background: #fff7ed; }
-    .custom-table tr.near-ret-row:hover { background: #ffedd5; }
-
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 700;
-    }
-
+    .status-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
     .status-badge.vacant { background: #fee2e2; color: #991b1b; }
     .status-badge.active { background: #dcfce7; color: #166534; }
-
-    .countdown-tag {
-      background: #ef4444;
-      color: white;
-      padding: 2px 8px;
-      border-radius: 20px;
-      font-size: 10.5px;
-      font-weight: 800;
-      display: inline-block;
-      white-space: nowrap;
-    }
-
+    .countdown-tag { background: #ef4444; color: white; padding: 2px 8px; border-radius: 20px; font-size: 10.5px; font-weight: 800; display: inline-block; white-space: nowrap; }
     .countdown-tag.warning { background: #ea580c; }
     .countdown-tag.gold { background: #d97706; }
 
-    /* Mobile */
-    .mobile-menu-btn {
-      display: none;
-      background: none;
-      border: none;
-      font-size: 20px;
-      color: var(--primary);
-      cursor: pointer;
+    /* Filter Bar */
+    .filter-bar {
+      background: #f8fafc; border: 1px solid var(--border); border-radius: 12px;
+      padding: 12px 16px; margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
     }
+    .search-input-wrap { flex: 1; min-width: 220px; position: relative; }
+    .search-input-wrap i { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+    .search-input-wrap input { width: 100%; padding: 9px 38px 9px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; }
+    .filter-select { padding: 9px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 12.5px; background: white; outline: none; }
 
     @media (max-width: 1024px) {
       :root { --sidebar-w: 0px; }
       .sidebar { transform: translateX(100%); width: 280px; }
       .sidebar.open { transform: translateX(0); }
       .main-wrapper { margin-right: 0; }
-      .mobile-menu-btn { display: block; }
     }
   </style>
 </head>
@@ -807,12 +314,10 @@
   <!-- Sidebar Navigation -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <div class="logo-icon">
-        <i class="fa-solid fa-chart-pie"></i>
-      </div>
+      <div class="logo-icon"><i class="fa-solid fa-chart-pie"></i></div>
       <div>
         <h2>نظام المسؤوليات 2026</h2>
-        <span>التحليل والإحلال الوظيفي</span>
+        <span>ترشيحات مقر الشركة بالدورة</span>
       </div>
     </div>
 
@@ -824,22 +329,18 @@
       </li>
       <li class="nav-item" onclick="switchTab('dept-rankings')">
         <i class="fa-solid fa-ranking-star" style="color: #fbbf24;"></i>
-        <span>أولوية الأقسام للنقل</span>
+        <span>أولوية أقسام المقر للنقل</span>
         <span class="nav-badge" style="background:#f59e0b; color:#0f172a;">9 أقسام</span>
       </li>
-      <li class="nav-item" onclick="switchTab('vacancies')">
-        <i class="fa-solid fa-briefcase"></i>
-        <span>شواغر مسؤولي الوحدات</span>
-        <span class="nav-badge" id="nav-vacant-count">75</span>
+      <li class="nav-item" onclick="switchTab('hq-vacancies')">
+        <i class="fa-solid fa-building"></i>
+        <span>شواغر وحدات المقر العام</span>
+        <span class="nav-badge" id="nav-hq-vac-count">14</span>
       </li>
-      <li class="nav-item" onclick="switchTab('succession')">
+      <li class="nav-item" onclick="switchTab('hq-succession')">
         <i class="fa-solid fa-user-clock"></i>
-        <span>الإحلال للتقاعد (&le; 3 سنوات)</span>
-        <span class="nav-badge danger" id="nav-retire-count">74</span>
-      </li>
-      <li class="nav-item" onclick="switchTab('dashboard')">
-        <i class="fa-solid fa-gauge-high"></i>
-        <span>لوحة المؤشرات العامة</span>
+        <span>إحلال المقر للتقاعد (&le; 3 سنوات)</span>
+        <span class="nav-badge danger" id="nav-hq-succ-count">20</span>
       </li>
       <li class="nav-item" onclick="switchTab('all-masooliat')">
         <i class="fa-solid fa-sitemap"></i>
@@ -852,8 +353,8 @@
     </ul>
 
     <div class="sidebar-footer">
-      <div>الملاك الدائم والعقود 315</div>
-      <div style="margin-top: 4px; font-weight: bold; color: #cbd5e1;">نطاق التقاعد: حتى 2029 (3 سنوات)</div>
+      <div>نطاق الترشيح المعتمد</div>
+      <div style="margin-top: 4px; font-weight: bold; color: #38bdf8;">مقر الشركة بالدورة حصراً</div>
     </div>
   </aside>
 
@@ -863,12 +364,12 @@
     <!-- Topbar -->
     <header class="topbar">
       <div style="display: flex; align-items: center; gap: 14px;">
-        <button class="mobile-menu-btn" onclick="toggleSidebar()">
+        <button class="btn btn-outline" style="padding: 6px 12px; display: none;" id="mobile-toggle" onclick="toggleSidebar()">
           <i class="fa-solid fa-bars"></i>
         </button>
         <div class="topbar-title">
           <h1 id="page-title">ملف المهندسة هدى حامد مصطاف مطلك</h1>
-          <p id="page-subtitle">دراسة شاملة: كافة الشواغر (75) + الأقسام المرتبة حسب الأولوية + الإحلال حتى 3 سنوات</p>
+          <p id="page-subtitle">ترشيحات حصرية داخل مقر الشركة العام ومقرات الهيئات بالدورة (مستبعد منها المستودعات ومحطات الضخ)</p>
         </div>
       </div>
 
@@ -884,10 +385,21 @@
     <main class="content-area">
 
       <!-- ============================================================= -->
-      <!-- TAB 1: HODA PROFILE & TARGET RECOMMENDATIONS -->
+      <!-- TAB 1: HODA PROFILE (HQ ONLY) -->
       <!-- ============================================================= -->
       <section id="tab-hoda-profile" class="tab-section active">
         
+        <!-- Strict Filter Notice Alert -->
+        <div class="hq-exclusive-alert">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-circle-check" style="color: #059669; font-size: 20px;"></i>
+            <div class="alert-text">
+              تم استبعاد كافة المستودعات ومحطات الضخ والمواقع الخارجية؛ كافة الترشيحات أدناه داخل <strong>مقر الشركة العام ومقرات الهيئات بالدورة (بغداد)</strong> حصراً.
+            </div>
+          </div>
+          <span class="hq-badge"><i class="fa-solid fa-location-dot"></i> مقر الشركة (الدورة)</span>
+        </div>
+
         <!-- Candidate Hero Banner -->
         <div class="candidate-hero">
           <div class="candidate-top">
@@ -908,7 +420,7 @@
 
             <div style="text-align: left;">
               <span class="candidate-badge" style="background: rgba(16, 185, 129, 0.2); border-color: #10b981; color: #a7f3d0; font-size: 13px;">
-                <i class="fa-solid fa-check-circle"></i> مؤهلة للترشيح المباشر (مسؤولة وحدة)
+                <i class="fa-solid fa-check-circle"></i> ترشيح حصري: مسؤولة وحدة بمقر الشركة
               </span>
             </div>
           </div>
@@ -928,7 +440,7 @@
             </div>
             <div class="cand-item">
               <label>الموقع الحالي</label>
-              <span>مقر الدورة (المدير العام)</span>
+              <span>مقر الدورة (مكتب المدير العام)</span>
             </div>
             <div class="cand-item">
               <label>الشعبة وطبيعة العمل الحالي</label>
@@ -943,96 +455,58 @@
 
         <!-- Sub Navigation within Hoda Section -->
         <div class="sub-tabs-wrap">
-          <button class="sub-tab-btn active" onclick="switchHodaSubTab('vacancies-all')">
+          <button class="sub-tab-btn active" onclick="switchHodaSubTab('vacancies-hq')">
             <i class="fa-solid fa-bullseye"></i>
-            <span>كافة الشواغر المناسبة (مسؤولة وحدة)</span>
-            <span class="badge-pill" id="hoda-vac-count-pill">75 شاغر</span>
+            <span>شواغر المقر العام المتاحة (مسؤولة وحدة)</span>
+            <span class="badge-pill" id="hoda-hq-vac-pill">14 شاغر بالمقر</span>
           </button>
           <button class="sub-tab-btn" onclick="switchHodaSubTab('dept-priorities')">
             <i class="fa-solid fa-ranking-star"></i>
-            <span>ترتيب الأقسام للنقل حسب الأولوية</span>
-            <span class="badge-pill">9 أقسام</span>
+            <span>ترتيب أقسام المقر للنقل حسب الأولوية</span>
+            <span class="badge-pill">9 أقسام بالمقر</span>
           </button>
-          <button class="sub-tab-btn" onclick="switchHodaSubTab('succession-3yrs')">
+          <button class="sub-tab-btn" onclick="switchHodaSubTab('succession-hq')">
             <i class="fa-solid fa-user-clock"></i>
-            <span>الإحلال والتعويض (تقاعد حتى 3 سنوات)</span>
-            <span class="badge-pill" id="hoda-succ-count-pill">74 منصب</span>
+            <span>إحلال المقر العام (تقاعد حتى 2029)</span>
+            <span class="badge-pill" id="hoda-hq-succ-pill">20 منصب بالمقر</span>
           </button>
         </div>
 
-        <!-- SUB-SECTION 1: ALL VACANCIES FOR HODA -->
-        <div id="hoda-sub-vacancies-all" class="hoda-sub-content">
+        <!-- SUB-SECTION 1: HQ VACANCIES -->
+        <div id="hoda-sub-vacancies-hq" class="hoda-sub-content">
           <div class="card">
             <div class="card-header">
-              <h3><i class="fa-solid fa-bullseye"></i> دليل كافة الشواغر المتاحة لترشيحها (مسؤولة وحدة فقط)</h3>
-              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                <button class="btn btn-outline btn-sm" onclick="filterHodaVacCategory('all')">الكل (75)</button>
-                <button class="btn btn-outline btn-sm" onclick="filterHodaVacCategory('عمليات ومستودعات نفطية')">عمليات ومستودعات</button>
-                <button class="btn btn-outline btn-sm" onclick="filterHodaVacCategory('عدادات ومعايرة ونقل ملكية')">عدادات ومعايرة</button>
-                <button class="btn btn-outline btn-sm" onclick="filterHodaVacCategory('متابعة مركزية وتخطيط فني')">متابعة وتخطيط</button>
-                <button class="btn btn-outline btn-sm" onclick="filterHodaVacCategory('فحص هندسي وسيطرة نوعية وسلامة')">فحص وسلامة</button>
-              </div>
+              <h3><i class="fa-solid fa-building"></i> الشواغر المباشرة داخل مقر الشركة العام (الدورة)</h3>
+              <span style="font-size: 12px; color: #047857; font-weight: 700;">
+                <i class="fa-solid fa-check"></i> مستبعد منها كافة المستودعات والمحطات
+              </span>
             </div>
 
-            <div class="filter-bar">
-              <div class="search-input-wrap">
-                <i class="fa-solid fa-search"></i>
-                <input type="text" id="hoda-vac-search" placeholder="بحث باسم المنصب، القسم، الموقع..." oninput="filterHodaVacancies()">
-              </div>
-              <select class="filter-select" id="hoda-vac-location-filter" onchange="filterHodaVacancies()">
-                <option value="">كافة المواقع</option>
-                <option value="بغداد">بغداد والمقر والدورة</option>
-                <option value="الوسط">هيئة عمليات الوسط</option>
-                <option value="الجنوب">هيئة عمليات الجنوب</option>
-                <option value="الشمال">هيئة عمليات الشمال</option>
-              </select>
-            </div>
-
-            <div class="rec-grid" id="hoda-all-vacancies-grid">
-              <!-- Dynamically populated -->
-            </div>
+            <div class="rec-grid" id="hoda-hq-vacancies-grid"></div>
           </div>
         </div>
 
-        <!-- SUB-SECTION 2: DEPARTMENT RANKING -->
+        <!-- SUB-SECTION 2: HQ DEPARTMENT RANKING -->
         <div id="hoda-sub-dept-priorities" class="hoda-sub-content" style="display: none;">
           <div class="card">
             <div class="card-header">
-              <h3><i class="fa-solid fa-ranking-star"></i> قائمة كافة الأقسام المرتبة حسب أولوية النقل والملاءمة</h3>
-              <span style="font-size: 12px; color: var(--text-muted);">تحليل فني وهندسي وجغرافي لـ 9 أقسام ملائمة لمسارها</span>
+              <h3><i class="fa-solid fa-ranking-star"></i> الترتيب الاستراتيجي لأقسام المقر العام للنقل والملاءمة</h3>
+              <span style="font-size: 12px; color: var(--text-muted);">مرتبة من الأولوية القصوى إلى المتاحة (كافة الأقسام داخل مجمع الدورة)</span>
             </div>
 
-            <div id="dept-ranking-container">
-              <!-- Dynamically loaded -->
-            </div>
+            <div id="dept-ranking-container"></div>
           </div>
         </div>
 
-        <!-- SUB-SECTION 3: SUCCESSION 3 YEARS -->
-        <div id="hoda-sub-succession-3yrs" class="hoda-sub-content" style="display: none;">
+        <!-- SUB-SECTION 3: HQ SUCCESSION -->
+        <div id="hoda-sub-succession-hq" class="hoda-sub-content" style="display: none;">
           <div class="card">
             <div class="card-header">
-              <h3><i class="fa-solid fa-user-clock"></i> خطة الإحلال والتعويض الموسعة (مسؤولو وحدات يتقاعدون خلال 1 إلى 3 سنوات)</h3>
-              <span class="countdown-tag warning"><i class="fa-solid fa-calendar-days"></i> تشمل مواليد 1966 إلى 1969 (تقاعد 2026 - 2029)</span>
+              <h3><i class="fa-solid fa-user-clock"></i> خطة الإحلال والتعويض داخل مقر الشركة (تقاعد خلال 1 إلى 3 سنوات)</h3>
+              <span class="countdown-tag warning"><i class="fa-solid fa-calendar-days"></i> مسؤولو وحدات بمقر الشركة مواليد 1966 إلى 1969</span>
             </div>
 
-            <div class="filter-bar">
-              <div class="search-input-wrap">
-                <i class="fa-solid fa-search"></i>
-                <input type="text" id="hoda-succ-search" placeholder="بحث بالمنصب، القسم، اسم المسؤول..." oninput="filterHodaSuccession()">
-              </div>
-              <select class="filter-select" id="hoda-succ-year-filter" onchange="filterHodaSuccession()">
-                <option value="">كافة سنوات التقاعد (1 - 3 سنوات)</option>
-                <option value="2026">سنة 2026 (هذا العام - فوري)</option>
-                <option value="2027">سنة 2027 (متبقي سنة)</option>
-                <option value="2028">سنة 2028 (متبقي سنتان)</option>
-                <option value="2029">سنة 2029 (متبقي 3 سنوات)</option>
-              </select>
-            </div>
-
-            <div class="rec-grid" id="hoda-all-succession-grid">
-              <!-- Dynamically loaded -->
-            </div>
+            <div class="rec-grid" id="hoda-hq-succession-grid"></div>
           </div>
         </div>
 
@@ -1044,80 +518,52 @@
       <section id="tab-dept-rankings" class="tab-section">
         <div class="card">
           <div class="card-header">
-            <h3><i class="fa-solid fa-ranking-star"></i> الترتيب الاستراتيجي للأقسام للنقل والترشيح</h3>
-            <span style="font-size: 12.5px; color: var(--accent); font-weight: bold;">9 أقسام رئيسية مرتبة بالأولوية</span>
+            <h3><i class="fa-solid fa-ranking-star"></i> الترتيب الاستراتيجي لأقسام مقر الشركة بالدورة للنقل والترشيح</h3>
+            <span style="font-size: 12.5px; color: var(--accent); font-weight: bold;">9 أقسام رئيسية بالمقر العام</span>
           </div>
           <div id="dept-ranking-direct-container"></div>
         </div>
       </section>
 
       <!-- ============================================================= -->
-      <!-- TAB 3: UNIT VACANCIES DIRECT TAB -->
+      <!-- TAB 3: HQ VACANCIES TABLE -->
       <!-- ============================================================= -->
-      <section id="tab-vacancies" class="tab-section">
+      <section id="tab-hq-vacancies" class="tab-section">
         <div class="card">
           <div class="card-header">
-            <h3><i class="fa-solid fa-briefcase"></i> دليل شواغر مسؤولي الوحدات المتاحة (75 شاغراً)</h3>
-            <button class="btn btn-outline btn-sm" onclick="exportTableToCSV('vacancies-table', 'شواغر_الوحدات_2026.csv')">
+            <h3><i class="fa-solid fa-briefcase"></i> دليل شواغر مسؤولي الوحدات بمقر الشركة (الدورة)</h3>
+            <button class="btn btn-outline btn-sm" onclick="exportTableToCSV('hq-vac-table', 'شواغر_مقر_الشركة_2026.csv')">
               <i class="fa-solid fa-download"></i> تصدير CSV
             </button>
           </div>
 
-          <div class="filter-bar">
-            <div class="search-input-wrap">
-              <i class="fa-solid fa-search"></i>
-              <input type="text" id="vac-search" placeholder="بحث باسم المنصب، القسم، الهيئة..." oninput="filterVacancies()">
-            </div>
-            <select class="filter-select" id="vac-formation-filter" onchange="filterVacancies()">
-              <option value="">جميع التشكيلات</option>
-              <option value="معاون مدير عام لشؤون العمليات">معاون شؤون العمليات</option>
-              <option value="المدير العام">المدير العام</option>
-              <option value="معاون مدير عام لشؤون عمليات الجنوب">معاون عمليات الجنوب</option>
-              <option value="معاون مدير عام للشؤون الفنية">معاون الشؤون الفنية</option>
-            </select>
-          </div>
-
           <div class="table-responsive">
-            <table class="custom-table" id="vacancies-table">
+            <table class="custom-table" id="hq-vac-table">
               <thead>
                 <tr>
                   <th>ت</th>
                   <th>المنصب الوظيفي الشاغر</th>
                   <th>القسم</th>
-                  <th>الهيئة</th>
+                  <th>الهيئة التابعة</th>
                   <th>التشكيل القيادي</th>
-                  <th>التصنيف التخصصي</th>
-                  <th>الملاءمة لهندسة النفط</th>
+                  <th>الموقع</th>
+                  <th>التصنيف والملاءمة</th>
                 </tr>
               </thead>
-              <tbody id="vacancies-tbody"></tbody>
+              <tbody id="hq-vacancies-tbody"></tbody>
             </table>
           </div>
         </div>
       </section>
 
       <!-- ============================================================= -->
-      <!-- TAB 4: RETIREMENT & SUCCESSION DIRECT TAB -->
+      <!-- TAB 4: HQ SUCCESSION TABLE -->
       <!-- ============================================================= -->
-      <section id="tab-succession" class="tab-section">
+      <section id="tab-hq-succession" class="tab-section">
         <div class="card">
           <div class="card-header">
-            <h3><i class="fa-solid fa-user-clock" style="color: #ea580c;"></i> خطة الإحلال لمسؤولي الوحدات على وشك التقاعد (نطاق 3 سنوات: 74 منصباً)</h3>
-            <span class="countdown-tag warning"><i class="fa-solid fa-triangle-exclamation"></i> مواليد 1966 إلى 1969</span>
-          </div>
-
-          <div class="filter-bar">
-            <div class="search-input-wrap">
-              <i class="fa-solid fa-search"></i>
-              <input type="text" id="ret-search" placeholder="بحث باسم المسؤول، المنصب، أو القسم..." oninput="filterRetirement()">
-            </div>
-            <select class="filter-select" id="ret-years-filter" onchange="filterRetirement()">
-              <option value="">جميع السنوات (&le; 3 سنوات)</option>
-              <option value="0">تقاعد فوري (2026)</option>
-              <option value="1">متبقي سنة (2027)</option>
-              <option value="2">متبقي سنتان (2028)</option>
-              <option value="3">متبقي 3 سنوات (2029)</option>
-            </select>
+            <h3><i class="fa-solid fa-user-clock" style="color: #ea580c;"></i> مسؤولو وحدات المقر على وشك التقاعد (نطاق حتى 2029)</h3>
+            <span class="countdown-tag warning"><i class="fa-solid fa-triangle-exclamation"></i> المقر العام بالدورة</span>
           </div>
 
           <div class="table-responsive">
@@ -1131,83 +577,23 @@
                   <th>سنة التقاعد والمتبقي</th>
                   <th>المنصب والوحدة</th>
                   <th>القسم والهيئة</th>
-                  <th>التشكيل</th>
-                  <th>التخصص المسجل</th>
+                  <th>التشكيل بالمقر</th>
                 </tr>
               </thead>
-              <tbody id="retirement-tbody"></tbody>
+              <tbody id="hq-succession-tbody"></tbody>
             </table>
           </div>
         </div>
       </section>
 
       <!-- ============================================================= -->
-      <!-- TAB 5: DASHBOARD -->
-      <!-- ============================================================= -->
-      <section id="tab-dashboard" class="tab-section">
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-icon" style="background: #e0f2fe; color: #0284c7;">
-              <i class="fa-solid fa-sitemap"></i>
-            </div>
-            <div class="stat-info">
-              <h3>1,447</h3>
-              <p>إجمالي المناصب والمسؤوليات</p>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon" style="background: #fee2e2; color: #dc2626;">
-              <i class="fa-solid fa-door-open"></i>
-            </div>
-            <div class="stat-info">
-              <h3>75</h3>
-              <p>شواغر مسؤولية وحدة</p>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon" style="background: #ffedd5; color: #ea580c;">
-              <i class="fa-solid fa-user-clock"></i>
-            </div>
-            <div class="stat-info">
-              <h3>74</h3>
-              <p>مسؤول وحدة يتقاعد خلال &le; 3 سنوات</p>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon" style="background: #fef3c7; color: #d97706;">
-              <i class="fa-solid fa-users-gear"></i>
-            </div>
-            <div class="stat-info">
-              <h3>386</h3>
-              <p>مناصب الوكالة المسجلة</p>
-            </div>
-          </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
-          <div class="card">
-            <div class="card-header">
-              <h3><i class="fa-solid fa-chart-bar"></i> توزيع المسؤوليات حسب التشكيلات</h3>
-            </div>
-            <div style="height: 280px;"><canvas id="formationsChart"></canvas></div>
-          </div>
-          <div class="card">
-            <div class="card-header">
-              <h3><i class="fa-solid fa-chart-pie"></i> نسب مستويات المسؤولية</h3>
-            </div>
-            <div style="height: 280px;"><canvas id="levelsChart"></canvas></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============================================================= -->
-      <!-- TAB 6: ALL MASOOLIAT -->
+      <!-- TAB 5: ALL MASOOLIAT -->
       <!-- ============================================================= -->
       <section id="tab-all-masooliat" class="tab-section">
         <div class="card">
           <div class="card-header">
             <h3><i class="fa-solid fa-sitemap"></i> قاعدة بيانات المسؤوليات الشاملة 2026</h3>
-            <span id="all-count-display" style="font-size: 13px; font-weight: 700; color: var(--accent);">1,447 سجلاً</span>
+            <span style="font-size: 13px; font-weight: 700; color: var(--accent);">1,447 سجلاً</span>
           </div>
 
           <div class="filter-bar">
@@ -1246,7 +632,7 @@
       </section>
 
       <!-- ============================================================= -->
-      <!-- TAB 7: WOKALA & FORBIDDEN -->
+      <!-- TAB 6: WOKALA & FORBIDDEN -->
       <!-- ============================================================= -->
       <section id="tab-wokala" class="tab-section">
         <div class="card" style="border-right: 5px solid #dc2626;">
@@ -1303,24 +689,22 @@
   <script>
     const data = window.APP_DATA || {};
     const responsibilities = data.responsibilities || [];
-    const allScoredVacancies = data.all_scored_vacancies || [];
-    const allScoredSuccession3yrs = data.all_scored_succession_3yrs || [];
-    const deptRankings = data.dept_rankings || [];
+    const pureHqVacancies = data.pure_hq_vacancies || [];
+    const pureHqSuccession = data.pure_hq_succession || [];
+    const hqDeptRankings = data.hq_dept_rankings || [];
     const wokalaList = data.wokala || [];
     const forbiddenList = data.forbidden || [];
 
     document.addEventListener('DOMContentLoaded', () => {
-      renderHodaAllVacancies(allScoredVacancies);
+      renderHqVacanciesCards(pureHqVacancies);
       renderDeptRankings();
-      renderHodaSuccession(allScoredSuccession3yrs);
-      renderVacanciesTable(allScoredVacancies);
-      renderRetirementTable(allScoredSuccession3yrs);
+      renderHqSuccessionCards(pureHqSuccession);
+      renderHqVacanciesTable(pureHqVacancies);
+      renderHqSuccessionTable(pureHqSuccession);
       renderAllMasooliatTable(responsibilities);
       renderWokalaAndForbidden();
-      initCharts();
     });
 
-    // Tab Navigation
     function switchTab(tabId) {
       document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.tab-section').forEach(el => el.classList.remove('active'));
@@ -1332,11 +716,10 @@
       if (targetTab) targetTab.classList.add('active');
 
       const titles = {
-        'hoda-profile': ['ملف المهندسة هدى حامد مصطاف مطلك', 'دراسة شاملة: كافة الشواغر (75) + الأقسام المرتبة حسب الأولوية + الإحلال حتى 3 سنوات'],
-        'dept-rankings': ['ترتيب الأقسام حسب الأولوية للنقل', 'قائمة بـ 9 أقسام تناسب تخصصها الهندسي وخبرتها الإدارية'],
-        'vacancies': ['دليل شواغر مسؤولي الوحدات', 'حصر كافة الوحدات الـ 75 الشاغرة المؤهلة للترشيح المباشر'],
-        'succession': ['خطة التعويض والإحلال للتقاعد (&le; 3 سنوات)', 'حصر 74 مسؤول وحدة محالين للتقاعد بين 2026 و 2029'],
-        'dashboard': ['لوحة المؤشرات والتحليلات العامة', 'إحصائيات الشواغر، الإحلال الوظيفي، وتوزيع المسؤوليات'],
+        'hoda-profile': ['ملف المهندسة هدى حامد مصطاف مطلك', 'ترشيحات حصرية داخل مقر الشركة العام ومقرات الهيئات بالدورة (مستبعد منها المستودعات ومحطات الضخ)'],
+        'dept-rankings': ['ترتيب أقسام المقر حسب الأولوية للنقل', 'قائمة بـ 9 أقسام داخل مجمع الدورة تناسب تخصصها الهندسي وخبرتها الإدارية'],
+        'hq-vacancies': ['دليل شواغر وحدات المقر العام', 'حصر شواغر مسؤولي الوحدات الكائنة بمقر الشركة بالدورة حصراً'],
+        'hq-succession': ['خطة الإحلال بمقر الشركة (&le; 3 سنوات)', 'مسؤولو وحدات بمقر الشركة بالدورة محالين للتقاعد بين 2026 و 2029'],
         'all-masooliat': ['دليل المسؤوليات الشامل 2026', 'محرك البحث والمطابقة في كافة التشكيلات والهيئات'],
         'wokala': ['جدول الوكلاء وقائمة الممنوعين', 'استعراض التكليفات بالوكالة والموانع الإدارية الموثقة']
       };
@@ -1354,7 +737,6 @@
       document.getElementById('sidebar').classList.toggle('open');
     }
 
-    // Sub-tab inside Hoda profile
     function switchHodaSubTab(subId) {
       document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.hoda-sub-content').forEach(c => c.style.display = 'none');
@@ -1366,67 +748,40 @@
       if (content) content.style.display = 'block';
     }
 
-    // Render All Vacancies for Hoda
-    function renderHodaAllVacancies(items) {
-      const grid = document.getElementById('hoda-all-vacancies-grid');
-      document.getElementById('hoda-vac-count-pill').innerText = `${items.length} شاغر`;
+    // Render HQ Vacancies Cards
+    function renderHqVacanciesCards(items) {
+      const grid = document.getElementById('hoda-hq-vacancies-grid');
+      document.getElementById('hoda-hq-vac-pill').innerText = `${items.length} شاغر بالمقر`;
+      document.getElementById('nav-hq-vac-count').innerText = items.length;
 
-      grid.innerHTML = items.map(v => {
-        let badgeColor = 'blue';
-        if (v.priority.includes('قصوى')) badgeColor = 'green';
-        else if (v.priority.includes('عالية')) badgeColor = 'purple';
-
-        return `
-          <div class="rec-card ${v.match_score >= 80 ? 'high-match' : 'petro-match'}">
-            <div class="rec-header">
-              <div class="rec-title">${v.position}</div>
-              <span class="score-badge ${badgeColor}">${v.priority}</span>
+      grid.innerHTML = items.map(v => `
+        <div class="rec-card high-match">
+          <div class="rec-header">
+            <div class="rec-title">${v.position}</div>
+            <span class="score-badge green">${v.priority}</span>
+          </div>
+          <div class="rec-body">
+            <div class="rec-field"><i class="fa-solid fa-building" style="color:#0284c7; width:16px;"></i> <span><strong>القسم:</strong> ${v.dept || 'مقر الهيئة'}</span></div>
+            <div class="rec-field"><i class="fa-solid fa-layer-group" style="color:#0284c7; width:16px;"></i> <span><strong>الهيئة:</strong> ${v.body || '-'}</span></div>
+            <div class="rec-field"><i class="fa-solid fa-network-wired" style="color:#0284c7; width:16px;"></i> <span><strong>التشكيل:</strong> ${v.formation || '-'}</span></div>
+            <div style="font-size:11.5px; color:#475569; margin-top:4px; line-height:1.4;">
+              <i class="fa-solid fa-circle-info" style="color:#0284c7;"></i> ${v.rationale}
             </div>
-            <div class="rec-body">
-              <div class="rec-field"><i class="fa-solid fa-building" style="color:#0284c7; width:16px;"></i> <span><strong>القسم:</strong> ${v.dept || 'مقر الهيئة'}</span></div>
-              <div class="rec-field"><i class="fa-solid fa-layer-group" style="color:#0284c7; width:16px;"></i> <span><strong>الهيئة:</strong> ${v.body || '-'}</span></div>
-              <div class="rec-field"><i class="fa-solid fa-network-wired" style="color:#0284c7; width:16px;"></i> <span><strong>التشكيل:</strong> ${v.formation || '-'}</span></div>
-              <div style="font-size:11px; color:#475569; margin-top:4px; line-height:1.4;">
-                <i class="fa-solid fa-circle-info" style="color:#0284c7;"></i> ${v.rationale}
-              </div>
-              <div class="rec-tags">
-                <span class="tag-chip petro">${v.category}</span>
-                <span class="tag-chip central">المستوى: مسؤولة وحدة</span>
-              </div>
-            </div>
-            <div style="margin-top:auto; padding-top:10px; border-top:1px dashed var(--border); font-size:11px; color:#16a34a; font-weight:700;">
-              <i class="fa-solid fa-check-double"></i> المنصب شاغر حالياً - جاهز للترشيح
+            <div class="rec-tags">
+              <span class="tag-chip hq"><i class="fa-solid fa-location-dot"></i> مقر الشركة (الدورة)</span>
+              <span class="tag-chip petro">${v.category}</span>
             </div>
           </div>
-        `;
-      }).join('');
-    }
-
-    function filterHodaVacancies() {
-      const q = document.getElementById('hoda-vac-search').value.toLowerCase().trim();
-      const loc = document.getElementById('hoda-vac-location-filter').value;
-
-      const filtered = allScoredVacancies.filter(v => {
-        const text = (v.position + v.dept + v.body + v.formation + v.category + v.rationale).toLowerCase();
-        const matchQ = !q || text.includes(q);
-        const matchLoc = !loc || (v.dept + v.body + v.formation).includes(loc);
-        return matchQ && matchLoc;
-      });
-      renderHodaAllVacancies(filtered);
-    }
-
-    function filterHodaVacCategory(cat) {
-      if (cat === 'all') {
-        renderHodaAllVacancies(allScoredVacancies);
-      } else {
-        const filtered = allScoredVacancies.filter(v => v.category.includes(cat));
-        renderHodaAllVacancies(filtered);
-      }
+          <div style="margin-top:auto; padding-top:10px; border-top:1px dashed var(--border); font-size:11px; color:#16a34a; font-weight:700;">
+            <i class="fa-solid fa-check-double"></i> المنصب شاغر حالياً بالمقر - جاهز للترشيح
+          </div>
+        </div>
+      `).join('');
     }
 
     // Render Department Rankings
     function renderDeptRankings() {
-      const html = deptRankings.map(d => `
+      const html = hqDeptRankings.map(d => `
         <div class="dept-rank-card">
           <div class="rank-number">#${d.rank}</div>
           <div class="dept-rank-content">
@@ -1436,20 +791,20 @@
             </div>
             <div style="font-size:12px; color:#64748b; margin-bottom:6px;">
               <i class="fa-solid fa-network-wired"></i> <strong>التشكيل:</strong> ${d.formation} &nbsp;|&nbsp; 
-              <i class="fa-solid fa-location-dot"></i> <strong>الموقع:</strong> ${d.location}
+              <i class="fa-solid fa-location-dot" style="color:#059669;"></i> <strong>الموقع:</strong> <span style="color:#059669; font-weight:700;">${d.location}</span>
             </div>
             <div class="dept-desc">
               <strong>سبب الأولوية والملاءمة:</strong> ${d.why_suitable}
             </div>
             <div class="dept-units-box">
               <div style="font-weight:700; color:var(--primary); margin-bottom:4px;">
-                <i class="fa-solid fa-sitemap"></i> الوحدات والشعب التابعة للقسم:
+                <i class="fa-solid fa-sitemap"></i> الوحدات والشعب الرئيسية التابعة للقسم:
               </div>
               <div style="display:flex; flex-wrap:wrap; gap:6px;">
-                ${d.key_units.map(u => `<span class="tag-chip dept">${u}</span>`).join('')}
+                ${d.key_units.map(u => `<span class="tag-chip" style="background:#f1f5f9; color:#334155;">${u}</span>`).join('')}
               </div>
               <div style="margin-top:8px; font-size:11.5px; color:#15803d; font-weight:700;">
-                <i class="fa-solid fa-star"></i> ميزة النقل المباشرة: ${d.transfer_advantage}
+                <i class="fa-solid fa-star"></i> ميزة النقل المباشرة بالمقر: ${d.transfer_advantage}
               </div>
             </div>
           </div>
@@ -1460,10 +815,11 @@
       document.getElementById('dept-ranking-direct-container').innerHTML = html;
     }
 
-    // Render Succession for Hoda (<= 3 years)
-    function renderHodaSuccession(items) {
-      const grid = document.getElementById('hoda-all-succession-grid');
-      document.getElementById('hoda-succ-count-pill').innerText = `${items.length} منصب`;
+    // Render HQ Succession Cards
+    function renderHqSuccessionCards(items) {
+      const grid = document.getElementById('hoda-hq-succession-grid');
+      document.getElementById('hoda-hq-succ-pill').innerText = `${items.length} منصب بالمقر`;
+      document.getElementById('nav-hq-succ-count').innerText = items.length;
 
       grid.innerHTML = items.map(s => {
         let tagColor = s.years_to_retirement <= 0 ? '#dc2626' : (s.years_to_retirement === 1 ? '#ea580c' : '#d97706');
@@ -1483,31 +839,21 @@
                 <div>المسؤول الحالي: <span class="holder-name">${s.name}</span> (${s.job_title || '-'})</div>
                 <div class="years-left">سنة التولد: ${s.birth_year} &bull; سنة التقاعد القانونية: <strong>${s.retirement_year}</strong></div>
               </div>
+              <div class="rec-tags">
+                <span class="tag-chip hq"><i class="fa-solid fa-location-dot"></i> داخل مقر الشركة بالدورة</span>
+              </div>
             </div>
             <div style="margin-top:auto; padding-top:10px; border-top:1px dashed var(--border); font-size:11.5px; color:#c2410c; font-weight:700;">
-              <i class="fa-solid fa-arrow-right-arrow-left"></i> خطة الإحلال: النقل للوحدة والتأهيل لاستلام المسؤولية
+              <i class="fa-solid fa-arrow-right-arrow-left"></i> خطة الإحلال: النقل للوحدة بالمقر والتأهيل لاستلام المسؤولية
             </div>
           </div>
         `;
       }).join('');
     }
 
-    function filterHodaSuccession() {
-      const q = document.getElementById('hoda-succ-search').value.toLowerCase().trim();
-      const yr = document.getElementById('hoda-succ-year-filter').value;
-
-      const filtered = allScoredSuccession3yrs.filter(s => {
-        const text = (s.name + s.position + s.dept + s.body + (s.job_title||'')).toLowerCase();
-        const matchQ = !q || text.includes(q);
-        const matchYr = !yr || s.retirement_year === parseInt(yr);
-        return matchQ && matchYr;
-      });
-      renderHodaSuccession(filtered);
-    }
-
-    // Direct Vacancies Table
-    function renderVacanciesTable(items) {
-      const tbody = document.getElementById('vacancies-tbody');
+    // Render HQ Vacancies Table
+    function renderHqVacanciesTable(items) {
+      const tbody = document.getElementById('hq-vacancies-tbody');
       tbody.innerHTML = items.map((v, i) => `
         <tr>
           <td>${i + 1}</td>
@@ -1515,28 +861,15 @@
           <td>${v.dept || '-'}</td>
           <td>${v.body || '-'}</td>
           <td>${v.formation || '-'}</td>
-          <td><span class="status-badge vacant">${v.category || 'وحدة'}</span></td>
-          <td>
-            ${v.match_score >= 80 ? '<span class="status-badge active"><i class="fa-solid fa-star"></i> أولوية قصوى</span>' : (v.match_score >= 60 ? '<span class="status-badge" style="background:#e0f2fe; color:#0369a1;">أولوية عالية</span>' : '<span class="status-badge" style="background:#f1f5f9; color:#475569;">متاح</span>')}
-          </td>
+          <td><span class="tag-chip hq">مقر الشركة (الدورة)</span></td>
+          <td><span class="status-badge active">${v.category}</span></td>
         </tr>
       `).join('');
     }
 
-    function filterVacancies() {
-      const q = document.getElementById('vac-search').value.toLowerCase().trim();
-      const form = document.getElementById('vac-formation-filter').value;
-      const filtered = allScoredVacancies.filter(v => {
-        const matchQ = !q || (v.position + v.dept + v.body + v.formation + v.category).toLowerCase().includes(q);
-        const matchForm = !form || (v.formation || '').includes(form);
-        return matchQ && matchForm;
-      });
-      renderVacanciesTable(filtered);
-    }
-
-    // Direct Retirement Table
-    function renderRetirementTable(items) {
-      const tbody = document.getElementById('retirement-tbody');
+    // Render HQ Succession Table
+    function renderHqSuccessionTable(items) {
+      const tbody = document.getElementById('hq-succession-tbody');
       tbody.innerHTML = items.map(s => `
         <tr class="near-ret-row">
           <td style="font-weight: 700;">${s.reg_no || '-'}</td>
@@ -1551,30 +884,14 @@
           <td style="font-weight: 700;">${s.position}</td>
           <td>${s.dept || '-'} / ${s.body || '-'}</td>
           <td>${s.formation || '-'}</td>
-          <td>${s.qualification || s.exact_spec || '-'}</td>
         </tr>
       `).join('');
     }
 
-    function filterRetirement() {
-      const q = document.getElementById('ret-search').value.toLowerCase().trim();
-      const yrs = document.getElementById('ret-years-filter').value;
-      const filtered = allScoredSuccession3yrs.filter(s => {
-        const matchQ = !q || (s.name + s.position + s.dept + s.body + s.reg_no).toLowerCase().includes(q);
-        let matchYrs = true;
-        if (yrs !== '') {
-          matchYrs = s.years_to_retirement === parseInt(yrs) || (parseInt(yrs) === 0 && s.years_to_retirement <= 0);
-        }
-        return matchQ && matchYrs;
-      });
-      renderRetirementTable(filtered);
-    }
-
-    // All Masooliat Table
+    // Render All Masooliat
     function renderAllMasooliatTable(items) {
       const tbody = document.getElementById('all-masooliat-tbody');
       const displayItems = items.slice(0, 150);
-      document.getElementById('all-count-display').innerText = `${items.length} سجلاً (معروض ${displayItems.length})`;
 
       tbody.innerHTML = displayItems.map(r => {
         let is3yrRet = r.birth_year && (r.birth_year + 60 - 2026 <= 3);
@@ -1621,7 +938,7 @@
       renderAllMasooliatTable(filtered);
     }
 
-    // Wokala and Forbidden
+    // Render Wokala and Forbidden
     function renderWokalaAndForbidden() {
       document.getElementById('forbidden-tbody').innerHTML = forbiddenList.map(f => `
         <tr>
@@ -1649,50 +966,6 @@
           <td style="font-size:11.5px; color:#64748b;">${w.notes || '-'}</td>
         </tr>
       `).join('');
-    }
-
-    // Charts
-    function initCharts() {
-      const ctxForm = document.getElementById('formationsChart')?.getContext('2d');
-      if (ctxForm) {
-        new Chart(ctxForm, {
-          type: 'bar',
-          data: {
-            labels: ['معاون شؤون العمليات', 'المدير العام', 'معاون عمليات الجنوب', 'معاون الشؤون الفنية'],
-            datasets: [{
-              label: 'عدد المسؤوليات',
-              data: [670, 360, 240, 177],
-              backgroundColor: ['#0284c7', '#0b2545', '#d97706', '#16a34a'],
-              borderRadius: 8
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true } }
-          }
-        });
-      }
-
-      const ctxLev = document.getElementById('levelsChart')?.getContext('2d');
-      if (ctxLev) {
-        new Chart(ctxLev, {
-          type: 'doughnut',
-          data: {
-            labels: ['وحدة', 'شعبة', 'قسم', 'مستودع / أخرى'],
-            datasets: [{
-              data: [1090, 265, 38, 54],
-              backgroundColor: ['#0284c7', '#38bdf8', '#0b2545', '#d97706']
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { position: 'bottom' } }
-          }
-        });
-      }
     }
 
     function exportTableToCSV(tableId, filename) {
